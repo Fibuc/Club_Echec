@@ -3,7 +3,12 @@ import helpers
 class MenuModel:
     """Classe modèle des menus.
     """
-    def __init__(self, name:str = "", options_list:list =[], file_name:str = ""):
+    def __init__(
+        self,
+        name:str = "",
+        options_list:list =[],
+        file_name:str = ""
+    ):
         self.name = name
         self.options_list = options_list
         self.file_name = file_name

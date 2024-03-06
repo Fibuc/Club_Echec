@@ -26,7 +26,8 @@ class MenuController():
         Args:
             menu_name (str): Nom du menu.
             options_menu (list): Liste des options du menu.
-            first_display (bool, optional): Indique s'il s'agit du premier affichage. Défaut = False.
+            first_display (bool, optional): Indique s'il s'agit du premier
+            affichage. Défaut = False.
 
         Returns:
             list: Retourne la liste des options
