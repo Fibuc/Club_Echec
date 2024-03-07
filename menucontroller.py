@@ -1,8 +1,8 @@
-from time import sleep
 from typing import Union
 
 from menumodel import MenuModel
 from menuview import MenuView
+from Controllers.clubcontroller import ClubController
 import helpers
 
 MENU_NAME_KEY = "menu_name"
@@ -13,6 +13,7 @@ class MenuController():
     def __init__(self):
         self.view = MenuView(self)
         self.user_choice = ""
+        self.club = ClubController()
 
     @staticmethod
     def select_menu(
@@ -64,7 +65,6 @@ class MenuController():
         """
         choice_number = 0
         validity_user_choice = []
-        validity = True
         for _ in menu_option_list:
             choice_number += 1
             validity_user_choice.append(choice_number)
@@ -82,11 +82,12 @@ class MenuController():
                     first_option,
                     last_option
                 )
-                sleep(3)
+                helpers.sleep_a_few_seconds()
                 return False
+            
         except ValueError:
             self.view.show_error_message_choice(user_choice)
-            sleep(3)
+            helpers.sleep_a_few_seconds()
             return False
 
     def main_menu(self):
@@ -145,10 +146,7 @@ class MenuController():
                 current_menu_options.pop()
                 continue
             elif user_option == current_menu_options[-1]:
-                break
-            
-            eval(helpers.ACTION_CHOICE_MENU[user_option])
-            
-            launch = False
-        
-        current_menu_options.pop()
+                launch = False
+            else:
+                eval(helpers.ACTION_CHOICE_MENU[user_option])
+            current_menu_options.pop()

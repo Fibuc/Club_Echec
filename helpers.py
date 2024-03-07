@@ -1,28 +1,44 @@
+from time import sleep
+
 BORDER_SIZE = 40
 BORDER = "=" * BORDER_SIZE
 BACK_TO_LINE = "\n"
 SPACE = BACK_TO_LINE * 10
+SECOND_TO_WAIT = 3
 
 WELCOME_MESSAGE = "BIENVENUE DANS L'APPLICATION DE TOURNOIS"
 
+NAME_MENU = "menu_name"
+OPTIONS_MENU = "menu_options"
+
 MAIN_MENU = {
-    "menu_name": "MENU PRINCIPAL",
-    "menu_options": {
+    NAME_MENU : "MENU PRINCIPAL",
+    OPTIONS_MENU : {
         "Créer/reprendre un tournois": {
-            "menu_name": "MENU TOURNOIS",
-            "menu_options": ["Créer un tournois", "Reprendre un tournois"]
+            NAME_MENU : "MENU TOURNOIS",
+            OPTIONS_MENU : [
+                "Créer un tournois",
+                "Reprendre un tournois"
+            ]
+            
         },
         "Créer un nouveau joueur": {
-            "menu_name": "MENU JOUEUR",
-            "menu_options": ["Ajouter un joueur", "Modifier un joueur"]
+            NAME_MENU : "MENU JOUEUR",
+            OPTIONS_MENU : [
+                "Ajouter un joueur",
+                "Modifier un joueur"
+            ]
         },
         "Ajouter/modifier un club": {
-            "menu_name": "MENU CLUB",
-            "menu_options": ["Ajouter un club", "Modifier un club"]
+            NAME_MENU : "MENU CLUB",
+            OPTIONS_MENU : [
+                "Ajouter un club",
+                "Modifier un club"
+            ]
         },
         "Afficher le menu des rapports": {
-            "menu_name": "MENU RAPPORTS",
-            "menu_options": [
+            NAME_MENU : "MENU RAPPORTS",
+            OPTIONS_MENU : [
                 "Afficher la liste des joueurs",
                 "Afficher la liste des tournois",
                 "Afficher le nom et date d'un tournois donné",
@@ -42,8 +58,8 @@ ACTION_CHOICE_MENU = {
     "Reprendre un tournois" : "print('Reprise du tournois')",
     "Ajouter un joueur" : "print('Ajout du joueur')",
     "Modifier un joueur" : "print('Modification du joueur')",
-    "Ajouter un club" : "print('Ajout du club')",
-    "Modifier un club" : "print('Modification du club')",
+    "Ajouter un club" : "self.club.create_new_club()",
+    "Modifier un club" : "self.club.change_club_name()",
     "Afficher la liste des joueurs" : (
         "print('Affiche de la liste des joueurs')"
     ),
@@ -61,3 +77,6 @@ ACTION_CHOICE_MENU = {
         " les matchs\")"
     )
 }
+
+def sleep_a_few_seconds():
+    sleep(SECOND_TO_WAIT)
