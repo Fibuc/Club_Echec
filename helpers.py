@@ -1,10 +1,16 @@
 from time import sleep
+from pathlib import Path
 
 BORDER_SIZE = 40
 BORDER = "=" * BORDER_SIZE
 BACK_TO_LINE = "\n"
 SPACE = BACK_TO_LINE * 10
 SECOND_TO_WAIT = 3
+
+DIR_PATH = Path.cwd()
+DATA_DIR = DIR_PATH / "data"
+SAVING_PATH_CLUB = DATA_DIR / "clubs.json"
+SAVING_PATH_PLAYERS = DATA_DIR / "players.json"
 
 WELCOME_MESSAGE = "BIENVENUE DANS L'APPLICATION DE TOURNOIS"
 
