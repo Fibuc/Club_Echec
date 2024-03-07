@@ -1,3 +1,9 @@
+from
+from
+
 class PlayerController():
     def __init__(self):
-        pass
+        self.view = self
+        self.model = self
+
+    
