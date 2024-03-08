@@ -28,7 +28,7 @@ MAIN_MENU = {
             ]
             
         },
-        "Créer un nouveau joueur": {
+        "Ajouter/modifier un joueur": {
             NAME_MENU : "MENU JOUEUR",
             OPTIONS_MENU : [
                 "Ajouter un joueur",
@@ -42,7 +42,7 @@ MAIN_MENU = {
                 "Modifier un club"
             ]
         },
-        "Afficher le menu des rapports": {
+        "Afficher des rapports": {
             NAME_MENU : "MENU RAPPORTS",
             OPTIONS_MENU : [
                 "Afficher la liste des joueurs",
@@ -62,12 +62,12 @@ ACTION_CHOICE_MENU = {
     " <-- Revenir au menu précédent" : "launch = False",
     "Créer un tournois" : "print(\"création d'un tournois\")",
     "Reprendre un tournois" : "print('Reprise du tournois')",
-    "Ajouter un joueur" : "print('Ajout du joueur')",
-    "Modifier un joueur" : "print('Modification du joueur')",
+    "Ajouter un joueur" : "self.player.create_new_player()",
+    "Modifier un joueur" : "self.player.get_player_list_in_order()",
     "Ajouter un club" : "self.club.create_new_club()",
     "Modifier un club" : "self.club.change_club_name()",
     "Afficher la liste des joueurs" : (
-        "print('Affiche de la liste des joueurs')"
+        "self.player."
     ),
     "Afficher la liste des tournois" : (
         "print('Affiche de la liste des tournois')"

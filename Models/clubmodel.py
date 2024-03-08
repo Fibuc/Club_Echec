@@ -8,8 +8,7 @@ class ClubModel:
         self.name = name
         self.national_chest_id = national_chest_id
 
-    @staticmethod
-    def save_club_datas(name: str, national_chest_id: str):
+    def save_club_datas(self):
         """Sauvegarde le nouveau club ou modifie le nom du club existant.
 
         Args:
@@ -22,7 +21,7 @@ class ClubModel:
             with open(helpers.SAVING_PATH_CLUB, "r", encoding="utf-8") as file:
                 datas = json.load(file)
         with open(helpers.SAVING_PATH_CLUB, "w", encoding="utf-8") as file:
-            datas[national_chest_id] = name
+            datas[self.national_chest_id] = self.name
             json.dump(datas, file, ensure_ascii=False, indent=4)
 
     @staticmethod
