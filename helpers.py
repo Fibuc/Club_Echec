@@ -1,3 +1,4 @@
+from datetime import datetime
 from time import sleep
 from pathlib import Path
 
@@ -9,6 +10,7 @@ SECOND_TO_WAIT = 3
 
 DIR_PATH = Path.cwd()
 DATA_DIR = DIR_PATH / "data"
+TOURNAMENT_DIR = DATA_DIR / "tournament"
 SAVING_PATH_CLUB = DATA_DIR / "clubs.json"
 SAVING_PATH_PLAYERS = DATA_DIR / "players.json"
 
@@ -63,7 +65,7 @@ ACTION_CHOICE_MENU = {
     "Créer un tournois" : "print(\"création d'un tournois\")",
     "Reprendre un tournois" : "print('Reprise du tournois')",
     "Ajouter un joueur" : "self.player.create_new_player()",
-    "Modifier un joueur" : "self.player.get_player_list_in_order()",
+    "Modifier un joueur" : "self.player.modify_a_player()",
     "Ajouter un club" : "self.club.create_new_club()",
     "Modifier un club" : "self.club.change_club_name()",
     "Afficher la liste des joueurs" : (
@@ -86,3 +88,19 @@ ACTION_CHOICE_MENU = {
 
 def sleep_a_few_seconds():
     sleep(SECOND_TO_WAIT)
+
+def format_date_time():
+    """Récupère la date et l'heure de l'exécution.
+
+    Returns:
+        str: Retourne la date et l'heure.
+    """
+    now = datetime.now()
+    date = now.date()
+    time = f"{now.hour}:{now.minute}:{now.second}"
+    return f"{date} {time}"
+
+def get_date():
+    now = datetime.now()
+    return now.date()
+

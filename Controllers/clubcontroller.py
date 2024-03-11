@@ -66,3 +66,10 @@ class ClubController:
         else:
             self.club_view.show_void_club_list()
             helpers.sleep_a_few_seconds()
+
+    def check_club_name_exist(self):
+        all_clubs = self.club_model.get_all_clubs_informations()
+        if self.club_model.name in all_clubs["name"]:
+            return True
+        else:
+            return False

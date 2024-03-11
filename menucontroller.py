@@ -3,7 +3,7 @@ from typing import Union
 from menumodel import MenuModel
 from menuview import MenuView
 from Controllers.clubcontroller import ClubController
-from playercontroller import PlayerController
+from Controllers.playercontroller import PlayerController
 import helpers
 
 MENU_NAME_KEY = "menu_name"

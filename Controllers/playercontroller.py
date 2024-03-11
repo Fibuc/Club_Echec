@@ -1,5 +1,5 @@
-from playermodel import PlayerModel
-from playerview import PlayerView
+from Models.playermodel import PlayerModel
+from Views.playerview import PlayerView
 import helpers
 
 class PlayerController():
@@ -66,8 +66,24 @@ class PlayerController():
 
     def modify_a_player(self):
         all_players = self.player_model.list_all_players_informations()
-        self.player_view.get_first_name()
+        first_name_search = self.player_view.get_first_name()
+        player_match = []
         if all_players:
             for player in all_players:
-                self.player_view.show_player_informations()
-            
+                if first_name_search in player:
+                    player_match.append(player)
+            for player in player_match:
+                first_name = player[0]
+                last_name = player[1]
+                birth_date = player[2]
+                club_name = player[3]
+                self.player_view.show_player_informations(
+                    first_name,
+                    last_name,
+                    birth_date,
+                    club_name
+                )
+            helpers.sleep_a_few_seconds()
+
+        if not player_match:
+            self.player_view.no_match_player_found(first_name_search)

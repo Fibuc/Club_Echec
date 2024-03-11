@@ -42,3 +42,11 @@ class PlayerView():
     @staticmethod   
     def show_no_player_datas():
         print("Il n'y a aucun joueur dans la base de données.")
+
+    @staticmethod
+    def get_first_name():
+        return input("Quel est le prénom du joueur ? : ")
+    
+    @staticmethod
+    def no_match_player_found(prenom):
+        print(f"Il n'y a aucun joueur ayant pour prénom \"{prenom}\" dans la base de données.")

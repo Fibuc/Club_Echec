@@ -15,8 +15,8 @@ class PlayerModel:
         last_name: str="",
         club_name: str="",
         birth_date: str="",
-        number_of_points: int = DEFAULT_NUMBER_OF_POINT,
-        tournament_participant: bool = False
+        number_of_points: int=DEFAULT_NUMBER_OF_POINT,
+        tournament_participant: bool=False
     ):
         self.first_name = first_name
         self.last_name = last_name
@@ -108,7 +108,8 @@ class PlayerModel:
                 first_name = player["first_name"]
                 last_name = player["last_name"]
                 birth_date = player["birth_date"]
-                all_informations = [first_name, last_name, birth_date]
+                club_name = player["club_name"]
+                all_informations = [first_name, last_name, birth_date, club_name]
                 all_players_list.append(all_informations)
             return all_players_list
         except FileNotFoundError:
