@@ -5,6 +5,7 @@ class PlayerView():
         first_name = input("Quel est le prénom du joueur ? : ")
         last_name = input("Quel est le nom de famille du joueur ? : ")
         birth_date = input("Quelle est sa date de naissance ? (JJ/MM/AAAA): ")
+        club_name = input("Quel est le club du participant ? : ")
         tournament_participant = input(
             "Participera-t-il au prochain tournois"
             " ? (O/N) : "
@@ -13,6 +14,7 @@ class PlayerView():
             first_name,
             last_name,
             birth_date,
+            club_name,
             tournament_participant
         ]
         return all_player_informations

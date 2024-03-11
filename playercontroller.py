@@ -12,7 +12,8 @@ class PlayerController():
         self.player_model.first_name = player_informations[0]
         self.player_model.last_name = player_informations[1]
         self.player_model.birth_date = player_informations[2]
-        if player_informations[3] in ("O", "o"):
+        self.player_model.club_name = player_informations[3]
+        if player_informations[4] in ("O", "o"):
             self.player_model.tournament_participant = True
         else:
             self.player_model.tournament_participant = False
@@ -62,3 +63,11 @@ class PlayerController():
                 current_player += 1
         else:
             self.player_view.show_no_player_datas()
+
+    def modify_a_player(self):
+        all_players = self.player_model.list_all_players_informations()
+        self.player_view.get_first_name()
+        if all_players:
+            for player in all_players:
+                self.player_view.show_player_informations()
+            
