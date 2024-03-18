@@ -3,6 +3,7 @@ import json
 import helpers
 
 PATH_PLAYER_LIST = helpers.SAVING_PATH_PLAYERS
+NOT_ENDED_TOURNAMENT_PREFIX = "Incomplete_"
 
 class TournamentModel:
     """Classe Tournois"""
@@ -75,11 +76,22 @@ class TournamentModel:
         self.description = description
         self.date_time_end = helpers.format_date_time()
 
-    def save_not_ended_tournament(self, name:str, location:str):
-        datas = {"name" : name, "location" : location}
+    def save_tournament(self, ended_tournament: bool=False):
+        datas = {
+            "name": self.name,
+            "location": self.location,
+            "player_list": self.player_list,
+            "date_time_start": self.date_time_start,
+            "date_time_end": self.date_time_end,
+            "description": self.description
+        }
         helpers.TOURNAMENT_DIR.mkdir(exist_ok=True, parents=True)
         date = helpers.get_date()
-        file_name = f"NT_Tournois {self.location} - {date}.json"
+        prefix = NOT_ENDED_TOURNAMENT_PREFIX
+        if ended_tournament:
+            prefix = ""
+            
+        file_name = f"{prefix}Tournament {self.location} - {date}.json"
         complete_path = helpers.TOURNAMENT_DIR / file_name
         with open(complete_path, "w", encoding="utf-8") as file:
             json.dump(datas, file,ensure_ascii=False, indent=4)

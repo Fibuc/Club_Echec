@@ -41,26 +41,18 @@ class PlayerModel:
         club = f"Club: {self.club_name}"
         return f"{name}, {birth_date}, {club}"
     
-    def list_all_player_in_order(self):
+    def list_all_players_in_order(self):
         """Affiche la liste de tous les joueurs triés dans l'ordre alphabétique.
 
         Returns:
             list: Liste triée de tous les joueurs.
         """
-        current_player = 0
         all_players_list = self.list_all_players_informations()
         if all_players_list:
-            with open(helpers.SAVING_PATH_PLAYERS, "r", encoding="utf-8") as file:  # Faire fonction récupérer données et associer les deux ====
-                all_players = json.load(file)
-            for player in all_players:
-                club_name = player["club_name"]
-                all_players_list[current_player].append(club_name)
-                current_player += 1
             sorted_list = sorted(all_players_list)
             return sorted_list
         else:
             return None
-
 
     def save_new_player(self):
         """Sauvegardes les données du joueur dans le fichier json
@@ -93,8 +85,7 @@ class PlayerModel:
     def add_to_tournament(self):
         self.tournament_participant = True
 
-    @staticmethod
-    def list_all_players_informations():
+    def list_all_players_informations(self):
         """Affiche la liste de tous les joueurs triés dans l'ordre alphabétique.
 
         Returns:
@@ -105,12 +96,21 @@ class PlayerModel:
             with open(helpers.SAVING_PATH_PLAYERS, "r", encoding="utf-8") as file:
                 all_players = json.load(file)
             for player in all_players:
-                first_name = player["first_name"]
-                last_name = player["last_name"]
-                birth_date = player["birth_date"]
-                club_name = player["club_name"]
-                all_informations = [first_name, last_name, birth_date, club_name]
+                self.first_name = player["first_name"]
+                self.last_name = player["last_name"]
+                self.birth_date = player["birth_date"]
+                self.club_name = player["club_name"]
+                self.tournament_participant = player["tournament_participant"]
+                all_informations = [
+                    self.first_name,
+                    self.last_name,
+                    self.birth_date,
+                    self.club_name,
+                    self.tournament_participant
+                ]
                 all_players_list.append(all_informations)
+                
             return all_players_list
+        
         except FileNotFoundError:
             return None

@@ -62,14 +62,14 @@ MAIN_MENU_NAME = MAIN_MENU[next(iter(MAIN_MENU))]
 
 ACTION_CHOICE_MENU = {
     " <-- Revenir au menu précédent" : "launch = False",
-    "Créer un tournois" : "self.tournament.create_new_tournament()",
+    "Créer un tournois" : "self.tournament_menu()",
     "Reprendre un tournois" : "print('Reprise du tournois')",
     "Ajouter un joueur" : "self.player.create_new_player()",
     "Modifier un joueur" : "self.player.modify_a_player()",
     "Ajouter un club" : "self.club.create_new_club()",
     "Modifier un club" : "self.club.change_club_name()",
     "Afficher la liste des joueurs" : (
-        "self.player."
+        "self.player.show_players_list_in_order()"
     ),
     "Afficher la liste des tournois" : (
         "print('Affiche de la liste des tournois')"
@@ -83,7 +83,19 @@ ACTION_CHOICE_MENU = {
     "Afficher liste tours d'un tournois + tous les matchs du tour" : (
         "print(\"Affiche la liste des tours d'un tournois et tous"
         " les matchs\")"
-    )
+    ),
+    "Valider et lancer le tournois" : "print('Tournois lancé')",
+    "Ajouter des participants" : "print('Ajout des participants')",
+    "Afficher les participants" : "self.player.get_participating_players_list()"
+}
+
+TOURNAMENT_MENU = {
+    NAME_MENU : "CREATION TOURNOIS",
+    OPTIONS_MENU : [
+        "Valider et lancer le tournois",
+        "Ajouter des participants",
+        "Afficher les participants"
+    ]
 }
 
 def sleep_a_few_seconds():

@@ -28,7 +28,7 @@ class PlayerView():
         print(f"Erreur: Le joueur \"{first_name} {last_name} {birth_date}\" existe déjà.")
 
     @staticmethod
-    def show_player_informations(
+    def show_players_informations(
         first_name: str,
         last_name: str,
         birth_date: str,

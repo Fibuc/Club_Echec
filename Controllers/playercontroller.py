@@ -36,7 +36,11 @@ class PlayerController():
 
     def check_player_exist(self):
         all_players_list = self.player_model.list_all_players_informations()
-        self.all_player_datas = (self.player_model.first_name, self.player_model.last_name, self.player_model.birth_date)
+        self.all_player_datas = (
+            self.player_model.first_name,
+            self.player_model.last_name,
+            self.player_model.birth_date
+        )
         if all_players_list:
             if self.all_player_datas in all_players_list:
                 return True
@@ -44,25 +48,38 @@ class PlayerController():
         else:
             return False
 
-
-    def get_player_list_in_order(self):
-        all_player_list = self.player_model.list_all_player_in_order()
+    def show_players_list_in_order(self):
+        all_player_list = self.player_model.list_all_players_in_order()
         if all_player_list:
-            current_player = 1
-            for player in all_player_list:
-                player_first_name = player[0]
-                player_last_name = player[1]
-                player_birth_date = player[2]
-                player_club = player[3]
-                self.player_view.show_player_informations(
-                    player_first_name,
-                    player_last_name,
-                    player_birth_date,
-                    player_club
-                )
-                current_player += 1
+            self.show_players(all_player_list)
         else:
             self.player_view.show_no_player_datas()
+    
+    def get_participating_players_list(self):
+        all_players_list = self.player_model.list_all_players_in_order()
+        participants_list = []
+        if all_players_list:
+            participants_list = [player for player in all_players_list if player[4]]
+
+        return participants_list
+    
+    def show_players(self, players_list):
+        current_player = 1
+        for player in players_list:
+            player_first_name = player[0]
+            player_last_name = player[1]
+            player_birth_date = player[2]
+            player_club = player[3]
+            self.player_view.show_players_informations(
+                player_first_name,
+                player_last_name,
+                player_birth_date,
+                player_club,
+                current_player
+            )
+            current_player += 1
+
+
 
     def modify_a_player(self):
         all_players = self.player_model.list_all_players_informations()
@@ -72,18 +89,35 @@ class PlayerController():
             for player in all_players:
                 if first_name_search in player:
                     player_match.append(player)
+
             for player in player_match:
                 first_name = player[0]
                 last_name = player[1]
                 birth_date = player[2]
                 club_name = player[3]
-                self.player_view.show_player_informations(
+                self.player_view.show_players_informations(
                     first_name,
                     last_name,
                     birth_date,
                     club_name
                 )
-            helpers.sleep_a_few_seconds()
+            
+            
 
         if not player_match:
             self.player_view.no_match_player_found(first_name_search)
+
+        helpers.sleep_a_few_seconds()
+
+    # def create_options_list(self):
+    #     number_of_option = 1
+    #     all_choices = []
+    #     for option in option_list:
+    #         all_choices.append(f"{number_of_option} - {option}")
+    #         number_of_option += 1
+    #     if name_menu != helpers.MAIN_MENU_NAME:
+    #         all_choices.append(
+    #             f"{number_of_option} <-- Revenir au menu précédent")
+        
+    #     all_choices_menu = "\n".join(all_choices)
+    #     return all_choices_menu

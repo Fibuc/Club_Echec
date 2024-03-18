@@ -7,9 +7,6 @@ from Controllers.playercontroller import PlayerController
 from tournamentcontroller import TournamentController
 import helpers
 
-MENU_NAME_KEY = "menu_name"
-MENU_OPTIONS_KEY = "menu_options"
-
 class MenuController():
     """Classe contrôleur des menus."""
     def __init__(self):
@@ -18,6 +15,8 @@ class MenuController():
         self.club = ClubController()
         self.player = PlayerController()
         self.tournament = TournamentController()
+        self.menu_name = ""
+        self.menu_options = []
 
     @staticmethod
     def select_menu(
@@ -100,18 +99,18 @@ class MenuController():
         first_display = True
         while launch:
             current_menu = helpers.MAIN_MENU
-            current_menu_name = current_menu[MENU_NAME_KEY]
-            current_menu_option = current_menu[MENU_OPTIONS_KEY]
-            if type(current_menu_option) == dict:
-                options = list(current_menu_option.keys())
+            self.menu_name = current_menu[helpers.NAME_MENU]
+            self.menu_options = current_menu[helpers.OPTIONS_MENU]
+            if type(self.menu_options) == dict:
+                options = list(self.menu_options.keys())
             else:
-                options = current_menu_option
+                options = self.menu_options
 
             if not first_display:
                 helpers.SPACE
                 
             menu_option_list = self.select_menu(
-                current_menu_name,
+                self.menu_name,
                 options,
                 first_display
             )
@@ -124,7 +123,7 @@ class MenuController():
                 launch = False
                 break
 
-            sub_menu = current_menu_option[user_option]
+            sub_menu = self.menu_options[user_option]
             self.sub_menu(sub_menu)
             first_display = False
 
@@ -136,22 +135,34 @@ class MenuController():
         """
         launch = True
         while launch:
-            current_menu_name = sub_menu[MENU_NAME_KEY]
-            current_menu_options = sub_menu[MENU_OPTIONS_KEY]
+            self.menu_name = sub_menu[helpers.NAME_MENU]
+            self.menu_options = sub_menu[helpers.OPTIONS_MENU]
             menu_option_list = self.select_menu(
-                current_menu_name,
-                current_menu_options
+                self.menu_name,
+                self.menu_options
             )
-            current_menu_options.append(next(iter(helpers.ACTION_CHOICE_MENU)))
+            self.menu_options.append(next(iter(helpers.ACTION_CHOICE_MENU)))
             # Ajout de l'option revenir au menu précédent.
             user_choice = self.view.get_menu_user_choice()
             user_option = self.check_user_choice(user_choice, menu_option_list)
             if not user_option:
-                current_menu_options.pop()
+                self.menu_options.pop()
                 continue
-            elif user_option == current_menu_options[-1]:
+            elif user_option == self.menu_options[-1]:
                 launch = False
             else:
-                eval(helpers.ACTION_CHOICE_MENU[user_option])
+                if type(user_option) == str: 
+                    eval(helpers.ACTION_CHOICE_MENU[user_option])
                 
-            current_menu_options.pop()
+            self.menu_options.pop()
+
+    def tournament_menu(self):
+        self.tournament.create_new_tournament()
+        self.sub_menu(helpers.TOURNAMENT_MENU)
+
+
+
+        # launch = True
+        # while launch:
+        #     self.menu_name = menu[helpers.NAME_MENU]
+        #     self.menu_options = menu[helpers.OPTIONS_MENU]
