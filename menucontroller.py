@@ -4,6 +4,7 @@ from menumodel import MenuModel
 from menuview import MenuView
 from Controllers.clubcontroller import ClubController
 from Controllers.playercontroller import PlayerController
+from tournamentcontroller import TournamentController
 import helpers
 
 MENU_NAME_KEY = "menu_name"
@@ -16,6 +17,7 @@ class MenuController():
         self.user_choice = ""
         self.club = ClubController()
         self.player = PlayerController()
+        self.tournament = TournamentController()
 
     @staticmethod
     def select_menu(
@@ -151,4 +153,5 @@ class MenuController():
                 launch = False
             else:
                 eval(helpers.ACTION_CHOICE_MENU[user_option])
+                
             current_menu_options.pop()

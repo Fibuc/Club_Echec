@@ -62,7 +62,7 @@ MAIN_MENU_NAME = MAIN_MENU[next(iter(MAIN_MENU))]
 
 ACTION_CHOICE_MENU = {
     " <-- Revenir au menu précédent" : "launch = False",
-    "Créer un tournois" : "print(\"création d'un tournois\")",
+    "Créer un tournois" : "self.tournament.create_new_tournament()",
     "Reprendre un tournois" : "print('Reprise du tournois')",
     "Ajouter un joueur" : "self.player.create_new_player()",
     "Modifier un joueur" : "self.player.modify_a_player()",
