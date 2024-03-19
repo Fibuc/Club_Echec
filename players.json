@@ -1,0 +1,82 @@
+[
+    {
+        "first_name": "Clément",
+        "last_name": "Leclerc",
+        "club_name": "2",
+        "birth_date": "06/08/1987",
+        "number_of_points": 0,
+        "tournament_participant": true
+    },
+    {
+        "first_name": "Jordan",
+        "last_name": "Fordain",
+        "club_name": "",
+        "birth_date": "08/11/1994",
+        "number_of_points": 0,
+        "tournament_participant": false
+    },
+    {
+        "first_name": "Aurélie",
+        "last_name": "Clint",
+        "club_name": "",
+        "birth_date": "07/01/1994",
+        "number_of_points": 0,
+        "tournament_participant": true
+    },
+    {
+        "first_name": "Frédéric",
+        "last_name": "Lordou",
+        "club_name": "",
+        "birth_date": "dsfsdf",
+        "number_of_points": 0,
+        "tournament_participant": true
+    },
+    {
+        "first_name": "George",
+        "last_name": "Grillard",
+        "club_name": "Club Bicolor",
+        "birth_date": "07/07/1959",
+        "number_of_points": 0,
+        "tournament_participant": false
+    },
+    {
+        "first_name": "George",
+        "last_name": "Mickeal",
+        "club_name": "3",
+        "birth_date": "06/08/1984",
+        "number_of_points": 0,
+        "tournament_participant": true
+    },
+    {
+        "first_name": "Julie",
+        "last_name": "Hubert",
+        "club_name": "Club FC Chom",
+        "birth_date": "06/06/1966",
+        "number_of_points": 0,
+        "tournament_participant": true
+    },
+    {
+        "first_name": "Jérémy",
+        "last_name": "Guilou",
+        "club_name": "",
+        "birth_date": "04/04/2004",
+        "number_of_points": 0,
+        "tournament_participant": true
+    },
+    {
+        "first_name": "Hugo",
+        "last_name": "Voilant",
+        "club_name": "",
+        "birth_date": "04/04/2004",
+        "number_of_points": 0,
+        "tournament_participant": true
+    },
+    {
+        "first_name": "Julien",
+        "last_name": "Courbet",
+        "club_name": "",
+        "birth_date": "04/04/2004",
+        "number_of_points": 0,
+        "tournament_participant": true
+    }
+]

@@ -11,3 +11,4 @@ class TournamentView:
         
     def get_user_choice(self):
         return input("Quel est votre choix ? : ")
+    

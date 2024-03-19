@@ -4,6 +4,14 @@ from tournamentmodel import TournamentModel
 
 import helpers
 
+START_TOURNAMENT_MENU = {
+    helpers.NAME_MENU : "DEBUT TOURNOIS",
+    helpers.OPTIONS_MENU : [
+        "Lancer le tour et générer des matchs",
+        "Enregistrer et quitter",
+        ]
+}
+
 class TournamentController:
     def __init__(self):
         self.tournament_view = TournamentView()
@@ -21,17 +29,28 @@ class TournamentController:
         )
         helpers.sleep_a_few_seconds()
 
+    def show_participants(self):
+        current_player = 1
+        for player in self.tournament_model.player_list:
+            self.player.player_view.show_players_informations(
+                player[helpers.KEY_FIRST_NAME_PLAYER],
+                player[helpers.KEY_LAST_NAME_PLAYER],
+                player[helpers.KEY_BIRTH_DATE_PLAYER],
+                player[helpers.KEY_CLUB_NAME_PLAYER],
+                player[helpers.KEY_TOURNAMENT_PARTICIPANT_PLAYER],
+                current_player=current_player
+            )
+            current_player += 1
+
     def add_participants(self):
+        first_name_search = self.player.player_view.get_first_name()
+
+    def resume_tournament(self):
         pass
 
+    def start_tournament(self):
         
-
         
-
-    
-
-
-
 
 
 

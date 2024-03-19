@@ -41,20 +41,19 @@ class PlayerModel:
         club = f"Club: {self.club_name}"
         return f"{name}, {birth_date}, {club}"
     
-    def list_all_players_in_order(self):
+    def all_players_in_order(self):
         """Affiche la liste de tous les joueurs triés dans l'ordre alphabétique.
 
         Returns:
             list: Liste triée de tous les joueurs.
         """
-        all_players_list = self.list_all_players_informations()
-        if all_players_list:
-            sorted_list = sorted(all_players_list)
-            return sorted_list
+        all_players = self.charge_players()
+        if all_players:
+            return sorted(all_players, key=lambda d: (d[helpers.KEY_FIRST_NAME_PLAYER], d[helpers.KEY_LAST_NAME_PLAYER]))
         else:
             return None
 
-    def save_new_player(self):
+    def add_new_player(self):
         """Sauvegardes les données du joueur dans le fichier json
 
         Args:
@@ -63,9 +62,8 @@ class PlayerModel:
 
         Returns:
             list: Retourne la liste comprenant tous les joueurs.
-        """
-        datas = []
-        dict_informations_new_player = {
+        """ 
+        self.dict_informations_new_player = {
             "first_name": self.first_name,
             "last_name": self.last_name,
             "club_name": self.club_name,
@@ -73,17 +71,30 @@ class PlayerModel:
             "number_of_points": self.number_of_points,
             "tournament_participant": self.tournament_participant
         }
+        all_players = self.charge_players()
+        all_players.append(self.dict_informations_new_player)
+        self.save_players(all_players)
+        
+
+    @staticmethod
+    def charge_players():
+        datas = []
         helpers.DATA_DIR.mkdir(parents=True, exist_ok=True)
         if helpers.SAVING_PATH_PLAYERS.exists():
             with open(helpers.SAVING_PATH_PLAYERS, "r", encoding="utf-8") as file:     # Faire fonction récupérer données et associer les deux ====
                 datas = json.load(file)
+
+        return datas
+
+    @staticmethod
+    def save_players(datas):
         with open(helpers.SAVING_PATH_PLAYERS, "w", encoding="utf-8") as file:
-            datas.append(dict_informations_new_player)
             json.dump(datas, file, ensure_ascii=False, indent=4)
 
 
     def add_to_tournament(self):
         self.tournament_participant = True
+
 
     def list_all_players_informations(self):
         """Affiche la liste de tous les joueurs triés dans l'ordre alphabétique.
@@ -92,25 +103,14 @@ class PlayerModel:
             list: Liste triée de tous les joueurs.
         """
         all_players_list = []
-        try:
-            with open(helpers.SAVING_PATH_PLAYERS, "r", encoding="utf-8") as file:
-                all_players = json.load(file)
-            for player in all_players:
-                self.first_name = player["first_name"]
-                self.last_name = player["last_name"]
-                self.birth_date = player["birth_date"]
-                self.club_name = player["club_name"]
-                self.tournament_participant = player["tournament_participant"]
-                all_informations = [
-                    self.first_name,
-                    self.last_name,
-                    self.birth_date,
-                    self.club_name,
-                    self.tournament_participant
-                ]
-                all_players_list.append(all_informations)
-                
-            return all_players_list
-        
-        except FileNotFoundError:
-            return None
+        all_players = self.charge_players()
+        for player in all_players:
+            first_name = player["first_name"]
+            last_name = player["last_name"]
+            birth_date = player["birth_date"]
+            club_name = player["club_name"]
+            all_informations = [first_name, last_name, birth_date, club_name]
+            all_players_list.append(all_informations)
+        return all_players_list
+    # except FileNotFoundError:
+    #     return None

@@ -14,6 +14,12 @@ TOURNAMENT_DIR = DATA_DIR / "tournament"
 SAVING_PATH_CLUB = DATA_DIR / "clubs.json"
 SAVING_PATH_PLAYERS = DATA_DIR / "players.json"
 
+KEY_FIRST_NAME_PLAYER = "first_name"
+KEY_LAST_NAME_PLAYER = "last_name"
+KEY_BIRTH_DATE_PLAYER = "birth_date"
+KEY_CLUB_NAME_PLAYER = "club_name"
+KEY_TOURNAMENT_PARTICIPANT_PLAYER = "tournament_participant"
+
 WELCOME_MESSAGE = "BIENVENUE DANS L'APPLICATION DE TOURNOIS"
 
 NAME_MENU = "menu_name"
@@ -62,14 +68,14 @@ MAIN_MENU_NAME = MAIN_MENU[next(iter(MAIN_MENU))]
 
 ACTION_CHOICE_MENU = {
     " <-- Revenir au menu précédent" : "launch = False",
-    "Créer un tournois" : "self.tournament_menu()",
-    "Reprendre un tournois" : "print('Reprise du tournois')",
+    "Créer un tournois" : "self.create_tournament_menu()",
+    "Reprendre un tournois" : "self.resume_tournament_menu()",
     "Ajouter un joueur" : "self.player.create_new_player()",
     "Modifier un joueur" : "self.player.modify_a_player()",
     "Ajouter un club" : "self.club.create_new_club()",
     "Modifier un club" : "self.club.change_club_name()",
     "Afficher la liste des joueurs" : (
-        "self.player.show_players_list_in_order()"
+        "self.player.show_players_in_order()"
     ),
     "Afficher la liste des tournois" : (
         "print('Affiche de la liste des tournois')"
@@ -84,17 +90,24 @@ ACTION_CHOICE_MENU = {
         "print(\"Affiche la liste des tours d'un tournois et tous"
         " les matchs\")"
     ),
-    "Valider et lancer le tournois" : "print('Tournois lancé')",
+    "Valider et lancer le tournois" : "self.tournament.start_tournament()",
     "Ajouter des participants" : "print('Ajout des participants')",
-    "Afficher les participants" : "self.player.get_participating_players_list()"
+    "Afficher les participants" : "self.tournament.show_participants()"
 }
 
-TOURNAMENT_MENU = {
+CREATION_TOURNAMENT_MENU = {
     NAME_MENU : "CREATION TOURNOIS",
     OPTIONS_MENU : [
         "Valider et lancer le tournois",
         "Ajouter des participants",
         "Afficher les participants"
+    ]
+}
+
+RESUME_TOURNAMENT_MENU = {
+    NAME_MENU : "REPRISE TOURNOIS",
+    OPTIONS_MENU : [
+        "Afficher la liste des tournois non terminés"
     ]
 }
 

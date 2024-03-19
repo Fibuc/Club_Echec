@@ -156,13 +156,10 @@ class MenuController():
                 
             self.menu_options.pop()
 
-    def tournament_menu(self):
+    def create_tournament_menu(self):
         self.tournament.create_new_tournament()
-        self.sub_menu(helpers.TOURNAMENT_MENU)
+        self.sub_menu(helpers.CREATION_TOURNAMENT_MENU)
 
-
-
-        # launch = True
-        # while launch:
-        #     self.menu_name = menu[helpers.NAME_MENU]
-        #     self.menu_options = menu[helpers.OPTIONS_MENU]
+    def resume_tournament_menu(self):
+        self.tournament.resume_tournament()
+        self.sub_menu(helpers.RESUME_TOURNAMENT_MENU)
