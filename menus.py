@@ -90,12 +90,9 @@ TOURNAMENT_MENU = {
 ROUND_MENU = {
     NAME_MENU: "TOURNOIS LANCE",
     OPTIONS_MENU: [
-        "Lancer les matchs"
+        "Lancer les matchs",
+        "Terminer les matchs"
     ]
-}
-
-MATCH_MENU = {
-    NAME_MENU: "MENU MATCH"
 }
 
 PLAYER_MENU = {

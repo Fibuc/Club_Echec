@@ -3,7 +3,7 @@ from tinydb import TinyDB, Query
 
 import menus
 
-PLAYER_DB = TinyDB("players.json").table("Players")
+PLAYER_DB = TinyDB(menus.SAVING_PATH_PLAYERS).table("Players")
 DEFAULT_NUMBER_OF_POINT = 0
 
 
@@ -73,9 +73,9 @@ class PlayerModel:
         else:
             participation = "Non"
         return (
-            f"Nom: {self.first_name} {self.last_name} \t"
-            f"Club: {self.club_name} \t"
-            f"Date de naissance: {self.birth_date} \t"
+            f"Nom: {self.first_name} {self.last_name}\t"
+            f"Date de naissance: {self.birth_date}\t"
+            f"Club: {self.club_name}\t"
             f"Participant au tournoi: {participation}"
         )
 
@@ -85,16 +85,31 @@ class PlayerModel:
         for player in all_players:
             cls.all_players.append(cls(**player))
 
-    def create_player(self, first_name, last_name, birth_date, club_name):
-        return PlayerModel(
+    @staticmethod
+    def create_player(first_name, last_name, birth_date, club_name):
+        player = PlayerModel(
             first_name=first_name,
             last_name=last_name,
             birth_date=birth_date,
             club_name=club_name
         )
+        player.save_player()
+
+        return player
 
     def save_player(self):
         PLAYER_DB.insert(self.__dict__)
+
+    def modify_player(self):
+        Player = Query()
+        PLAYER_DB.update(
+            self.__dict__, 
+            (Player.first_name == self.first_name) & 
+            (Player.last_name == self.last_name) &
+            (Player.birth_date == self.birth_date)
+        )
+    
+
 
 if __name__ == "__main__":
     playermodel = PlayerModel()

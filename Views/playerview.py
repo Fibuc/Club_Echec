@@ -95,7 +95,7 @@ class PlayerView:
         for result in result_list:
             if numbering:
                 current_player += 1
-                print(f"Joueur {current_player}: \t{result}")
+                print(f"Joueur {current_player}: {result}")
             else:
                 print(result)
 
