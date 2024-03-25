@@ -1,107 +1,154 @@
+from typing import Callable
+
 import helpers
 
-class PlayerView():
+class PlayerView:
+    def __init__(
+            self,
+            user_choice_player: str="",
+            user_choice_information: str=""
+        ):
+        self.user_choice_player = user_choice_player
+        self.user_choice_information = user_choice_information
     
-    INFORMATIONS_TYPE = {
-        "Le prénom": helpers.KEY_FIRST_NAME_PLAYER,
-        "Le nom de famille": helpers.KEY_LAST_NAME_PLAYER,
-        "La date de naissance": helpers.KEY_BIRTH_DATE_PLAYER,
-        "Le club": helpers.KEY_CLUB_NAME_PLAYER,
-        "La participation": helpers.KEY_TOURNAMENT_PARTICIPANT_PLAYER
-    }
-
-
+    # Récupération de données utilisateur
     @staticmethod
-    def get_new_player_informations():
+    def get_menu_user_choice() -> str:
+            """Retourne le choix de l'utilisateur fait au menu.
+
+            Returns:
+                str: Choix de l'utilisateur
+            """
+            return input("Quel est votre choix ? : ")
+    
+    @staticmethod
+    def get_new_player_name():
         first_name = input("Quel est le prénom du joueur ? : ")
         last_name = input("Quel est le nom de famille du joueur ? : ")
-        birth_date = input("Quelle est sa date de naissance ? (JJ/MM/AAAA): ")
-        club_name = input("Quel est le club du participant ? : ")
-        tournament_participant = input(
-            "Participera-t-il au prochain tournois"
-            " ? (O/N) : "
-        )
-        all_player_informations = [
-            first_name,
-            last_name,
-            birth_date,
-            club_name,
-            tournament_participant
-        ]
-        return all_player_informations
+        return first_name, last_name
+  
+    @staticmethod
+    def get_new_player_birth_date():
+        return input("Quelle est sa date de naissance ? (JJ/MM/AAAA): ")
+   
+    @staticmethod
+    def get_new_player_club_name():
+        return input("Quel est son club ? : ")
+
+    @staticmethod
+    def get_new_player_participation():
+        return input("Participera-t-il au prochain tournois ? (O/N) : ")
+
+    def get_first_name(self):
+        self._show_border()
+        return input("Quel est le prénom du joueur ? : ")
+
+    def get_player_to_modify(self):
+        self.user_choice_player = input("Quel est le numéro du joueur à modifier ? : ")
+
+    def get_information_to_modify(self):
+        self._show_border()
+        self.user_choice_information = input("Quel est l'information du joueur à modifier ? : ")
+    
+    @staticmethod
+    def get_new_value():
+        return input(f"Quelle est la nouvelle valeur ? : ")
+  
+    # Affichage des données à l'utilisateur
+    @staticmethod
+    def show_menu(
+        menu_function: Callable,
+        menu_name: str,
+        options_menu: list
+    ) -> list:
+        """Affiche le menu formaté.
+
+        Args:
+            menu_function (Callable): Fonction comprenant le menu.
+            menu_name (str): Nom du menu.
+            options_menu (list): Liste des options du menu.
+            first_display (bool): Etat du premier affichage.
+
+        Returns:
+            list: Retourne la liste des options.
+        """
+        decoration = helpers.decorative_menu_element(function=menu_function)
+        full_menu = decoration(menu_name, options_menu)
+        print(full_menu)
+        return options_menu
+    
+    @staticmethod
+    def show_error_message_choice(user_choice: str):
+        """Affiche un message d'erreur lorsque le choix de l'utilisateur
+        n'est pas correct.
+
+        Args:
+            user_choice (str): Choix de l'utilisateur.
+        """
+        print(f"Erreur: La commande \"{user_choice}\" n'est pas une commande valide.")
+            
+    def show_players(self, result_list: list, numbering: bool=False):
+        self._show_border()
+        self._show_number_of_player_found(result_list)
+        self._show_border()
+        current_player = 0
+        for result in result_list:
+            if numbering:
+                current_player += 1
+                print(f"Joueur {current_player}: \t{result}")
+            else:
+                print(result)
+
+        self._show_border()
     
     @staticmethod
     def show_new_player_created(first_name: str, last_name: str):
-        print(f"Le nouveau joueur \"{first_name} {last_name}\" a été créé.")
+        print(f"Le nouveau joueur \"{first_name} {last_name}\" a bien été créé.")
 
     @staticmethod
-    def show_player_exist(first_name: str, last_name: str, birth_date: str):
+    def show_error_player_already_exist(first_name: str, last_name: str, birth_date: str):
         print(f"Erreur: Le joueur \"{first_name} {last_name} {birth_date}\" existe déjà.")
 
-    @staticmethod
-    def show_players_informations(
-        first_name: str,
-        last_name: str,
-        birth_date: str,
-        club_name: str,
-        participation: bool,
-        current_player: int=1,
-    ):
-        print(f"Joueur {current_player}: {first_name} {last_name} "
-              f"- Date de naissance : {birth_date} "
-              f"- Club : {club_name} "
-              f"Participant : {participation}"
-        )
-
     @staticmethod   
-    def show_no_player_datas():
+    def show_no_player_in_database(): # Pas utilisé !!!
         print("Il n'y a aucun joueur dans la base de données.")
-
-    def get_first_name(self):
-        return input("Quel est le prénom du joueur ? : ")
     
     @staticmethod
-    def no_match_player_found(prenom):
+    def show_no_match_player_found(prenom):
         print(f"Il n'y a aucun joueur ayant pour prénom \"{prenom}\" dans la base de données.")
-
-    def get_player_to_modify(self):
-        self.show_border()
-        return input("Quel est le numéro du joueur à modifier ? : ")
     
+    @staticmethod
+    def show_no_paticipants(): # Pas utilisé !!!
+        print("Il n'y a aucun participant au prochain prochain tournois.")
+
     def show_informations_type(self):
-        self.show_border()
-        print("Liste des informations")
-        self.show_border()
+        print("Liste des informations :")
         current_information = 1
-        for information in self.INFORMATIONS_TYPE:
+        for information in self.informations_type:
             print(f"{current_information} - {information}")
             current_information += 1
     
-    def show_title_players(self):
-        self.show_border()
+    def show_title_players(self): # Pas utilisé !!!
+        self._show_border()
         print("Liste des joueurs")
-        self.show_border()
-
-    def get_information_to_modify(self):
-        self.show_border()
-        return input("Quel est l'information du joueur à modifier ? : ")
-    
-    def get_new_value(self):
-        return input(f"Quelle est la nouvelle valeur ? : ")
-    
-    def show_success_message(self):
-        self.show_border()
+        self._show_border()
+  
+    def show_valid_modifications(self):
+        self._show_border()
         print("Validé! Le joueur à bien été modifié.")
-    
+ 
     @staticmethod
-    def show_error_message(user_choice: str):
-        print(f"Erreur: La commande \"{user_choice}\" n'est pas valide.")
+    def show_error_date(birth_date):
+        print(f"La date \"{birth_date}\" n'est pas valide.")
 
     @staticmethod
-    def show_border():
+    def _show_number_of_player_found(result_list: list):
+        result_numer = len(result_list)
+        plural_choice = (
+            f"{'s ont été trouvés.' if result_numer > 1 else " a été trouvé."}"
+        )
+        print(f"Résultat: {result_numer} joueur{plural_choice} ")
+
+    @staticmethod
+    def _show_border():
         print(helpers.BORDER)
-
-    @staticmethod
-    def show_space():
-        print(helpers.SPACE)
-

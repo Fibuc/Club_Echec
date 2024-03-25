@@ -1,11 +1,33 @@
-from Views.clubview import ClubView
 from Models.clubmodel import ClubModel
+from Views.clubview import ClubView
+
 import helpers
+
 
 class ClubController:
     def __init__(self):
         self.club_view = ClubView()
         self.club_model = ClubModel()
+
+    def club_menu(self):
+        launch = True
+        while launch:
+            self.club_view.show_menu(
+                helpers.create_menu,
+                self.club_model.menu_name,
+                self.club_model.menu_options,
+            )
+            user_choice = self.club_view.get_menu_user_choice()
+            match user_choice:
+                case "1":
+                    print("Choix 1")
+                case "2":
+                    print("Choix 2")
+                case "3":
+                    launch = False
+                case _:
+                    self.club_view.show_error_message_choice(user_choice)
+                    helpers.sleep_a_few_seconds()
 
     def create_new_club(self):
         club_informations = self.club_view.get_club_informations()
@@ -35,15 +57,15 @@ class ClubController:
     def check_national_chest_id(self):
         if len(self.club_model.national_chest_id) != 6:
             return False
-        
+
         if not self.club_model.national_chest_id[:2].isalpha():
             return False
-        
+
         if not self.club_model.national_chest_id[2:].isdigit():
             return False
-        
+
         return True
-    
+
     def change_club_name(self):
         self.club_view.show_border()
         all_clubs_informations = self.club_model.get_all_clubs_informations()
