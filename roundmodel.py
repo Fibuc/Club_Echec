@@ -17,8 +17,8 @@ class RoundModel:
     round_db: ClassVar[TinyDB]
     current_round: ClassVar[int]=0
     all_rounds: ClassVar[list]=[]
-    all_match_played: ClassVar[list]=[]
-    all_player_list: ClassVar[list]=[]
+    all_matchs_played: ClassVar[list]=[]
+    participants: ClassVar[list]=[]
 
     def __init__(
             self,
@@ -56,7 +56,7 @@ class RoundModel:
     def check_already_played_together(self):
         self.load_matchs()
         matchs_list_to_check = []
-        for match in self.all_match_played:
+        for match in self.all_matchs_played:
             name_first_player = match[0][INDEX_PLAYER_NAME]
             name_second_player = match[1][INDEX_PLAYER_NAME]
             matchs_list_to_check.append(
@@ -68,8 +68,8 @@ class RoundModel:
 
 
     def sorted_by_elo(self):
-        RoundModel.all_player_list = sorted(
-            RoundModel.all_player_list, key=lambda player: (
+        RoundModel.participants = sorted(
+            RoundModel.participants, key=lambda player: (
                 player.number_of_points,
                 player.first_name,
                 player.last_name

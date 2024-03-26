@@ -67,3 +67,7 @@ class RoundView:
 
     def show_error_message(self, user_choice):
         print(f"La commande \"{user_choice}\" n'est pas valide.")
+    
+    @staticmethod
+    def show_all_match_played():
+        print("Tous les matchs ont été joués.")

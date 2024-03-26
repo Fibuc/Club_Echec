@@ -1,6 +1,7 @@
 from datetime import datetime
 from time import sleep
 from typing import Callable
+from random import shuffle
 
 import menus
 
@@ -142,4 +143,7 @@ def description_round(sub_name):
     result += f"Round actuel : Round {sub_name}{BACK_TO_LINE}{BORDER}{BACK_TO_LINE}"
     return result
 
+def shuffle_element(element_to_shuffle: list):
+    shuffle(element_to_shuffle)
+    return element_to_shuffle.pop()
 

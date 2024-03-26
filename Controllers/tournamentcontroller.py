@@ -42,7 +42,7 @@ class TournamentController:
             match user_choice:
                 case "1":
                     self.new_tournament()
-                    RoundModel.all_player_list = (
+                    RoundModel.participants = (
                         self.player.player_model.participants
                     )
                     RoundModel.round_db = self.tournament_model.tournament_path
