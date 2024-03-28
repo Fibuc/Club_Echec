@@ -12,15 +12,6 @@ import helpers
 import menus
 
 
-START_TOURNAMENT_MENU = {
-    menus.NAME_MENU : "DEBUT TOURNOIS",
-    menus.OPTIONS_MENU : [
-        "Lancer le tour et générer des matchs",
-        "Enregistrer et quitter",
-        ]
-}
-
-
 class TournamentController:
     def __init__(self):
         self.tournament_view = TournamentView()
@@ -42,7 +33,7 @@ class TournamentController:
             match user_choice:
                 case "1":
                     self.new_tournament()
-                    RoundModel.participants = (
+                    self.round.participants = (
                         self.player.player_model.participants
                     )
                     RoundModel.round_db = self.tournament_model.tournament_path
@@ -74,7 +65,7 @@ class TournamentController:
         if TournamentModel.all_tournaments:
             for tournament in TournamentModel.all_tournaments:
                 if tournament.name.startwith(NOT_ENDED_TOURNAMENT_PREFIX):
-                    PlayerModel.participants.append(tournament)
+                    self.round.participants.append(tournament)
 
     def resume_tournament(self):
         pass

@@ -2,10 +2,9 @@ from typing import ClassVar
 from tinydb import TinyDB, Query
 
 import menus
+from helpers import DEFAULT_NUMBER_OF_POINT
 
 PLAYER_DB = TinyDB(menus.SAVING_PATH_PLAYERS).table("Players")
-DEFAULT_NUMBER_OF_POINT = 0
-
 
 class PlayerModel:
     """Classe joueur"""
@@ -21,8 +20,8 @@ class PlayerModel:
         last_name: str="",
         birth_date: str="",
         club_name: str="",
-        tournament_participant: bool=False,
-        number_of_points: int=DEFAULT_NUMBER_OF_POINT
+        participation: bool=False,
+        points: float=DEFAULT_NUMBER_OF_POINT
     ):
         """Initialise un joueur avec les attributs spécifiés.
 
@@ -34,17 +33,17 @@ class PlayerModel:
             format 'DD/MM/AAAA'. Defaults to "".
             club_name (str, optional): Le nom du club auquel le joueur est
             assigné. Defaults to "".
-            tournament_participant (bool, optional): Indique si le joueur
+            participation (bool, optional): Indique si le joueur
             participe au prochain tournoi. Defaults to False.
-            number_of_points (int, optional): Le nombre de points du joueur.
+            points (int, optional): Le nombre de points du joueur.
             Defaults to DEFAULT_NUMBER_OF_POINT.
         """
         self.first_name = first_name
         self.last_name = last_name
         self.birth_date = birth_date
         self.club_name = club_name
-        self.tournament_participant = tournament_participant
-        self.number_of_points = number_of_points
+        self.participation = participation
+        self.points = points
 
 
     def __repr__(self) -> str:
@@ -58,8 +57,8 @@ class PlayerModel:
             f"PlayerModel(first_name='{self.first_name}', "
             f"last_name='{self.last_name}', club_name='{self.club_name}', "
             f"birth_date='{self.birth_date}', "
-            f"number_of_points={self.number_of_points}, "
-            f"tournament_participant={self.tournament_participant})"
+            f"number_of_points={self.points}, "
+            f"tournament_participant={self.participation})"
         )
 
     def __str__(self) -> str:
@@ -68,7 +67,7 @@ class PlayerModel:
         Returns:
             str: Chaîne de caractères représentant l'objet.
         """
-        if self.tournament_participant:
+        if self.participation:
             participation = "Oui"
         else:
             participation = "Non"
@@ -109,18 +108,5 @@ class PlayerModel:
             (Player.birth_date == self.birth_date)
         )
     
-
-
-if __name__ == "__main__":
-    playermodel = PlayerModel()
-    player = playermodel.create_player(
-        first_name="Jean",
-        last_name="Michel",
-        birth_date= "09/09/1998",
-        club_name="Club 1"
-    )
-    print(player)
-    player.save_player()
-    player.load_all_players()
-    for player in PlayerModel.all_players:
-        print(repr(player))
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"

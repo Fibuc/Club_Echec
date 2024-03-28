@@ -17,6 +17,7 @@ INDEX_MENU_DESCRIPTION = 2
 
 DEFAULT_NUMBER_ROUNDS = 4
 
+DEFAULT_NUMBER_OF_POINT = 0
 
 def sleep_a_few_seconds():
     sleep(SECOND_TO_WAIT)
@@ -144,6 +145,6 @@ def description_round(sub_name):
     return result
 
 def shuffle_element(element_to_shuffle: list):
-    shuffle(element_to_shuffle)
-    return element_to_shuffle.pop()
+    return shuffle(element_to_shuffle)
+
 

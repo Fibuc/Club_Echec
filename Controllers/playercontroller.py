@@ -62,12 +62,12 @@ class PlayerController:
         )
         if type(index) == int:
             player_to_modify = players_found[index]
-            player_to_modify.tournament_participant = True
+            player_to_modify.participation = True
             player_to_modify.modify_player()
             PlayerModel.participants.append(player_to_modify)
             
     def get_participants(self):
-        participants = [player for player in self.player_model.all_players if player.tournament_participant == True]
+        participants = [player for player in self.player_model.all_players if player.participation == True]
         PlayerModel.participants = participants
 
     def check_user_choice(self, user_choice: str, list_to_control: list):
@@ -85,6 +85,7 @@ class PlayerController:
         except ValueError:
             self.player_view.show_error_message_choice(user_choice)
             helpers.sleep_a_few_seconds()
+    
 
 
 
