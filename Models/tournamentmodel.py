@@ -30,7 +30,7 @@ class TournamentModel:
             self,
             name: str="",
             location: str="",
-            players_list: list=[],
+            participants: list=[],
             rounds_list: list=[],
             date_time_start: str="Non commencé",
             date_time_end : str="Non terminé",
@@ -38,7 +38,7 @@ class TournamentModel:
     ):
         self.name = name
         self.location = location
-        self.players_list = players_list
+        self.participants = participants
         self.rounds_list = rounds_list
         self.date_time_start = date_time_start
         self.date_time_end = date_time_end
@@ -53,7 +53,7 @@ class TournamentModel:
         """
         return (
             f"TournamentModel(name='{self.name}', "
-            f"location='{self.location}', players_list='{self.players_list}', "
+            f"location='{self.location}', players_list='{self.participants}', "
             f"rounds_list='{self.rounds_list}', "
             f"date_time_start={self.date_time_start}, "
             f"date_time_end={self.date_time_end}, "
@@ -67,8 +67,8 @@ class TournamentModel:
         Returns:
             str: Représentation de l'instance en chaîne de caractères.
         """
-        if self.players_list:
-            players = len(self.players_list)
+        if self.participants:
+            players = len(self.participants)
             plural_player = f"{"s" if players > 1 else ""}"
         else:
             players = 0
@@ -114,7 +114,7 @@ class TournamentModel:
         tournament = TournamentModel(
             name=name,
             location=location,
-            players_list=players_list,
+            participants=players_list,
             rounds_list=rounds_list,
             date_time_start=date_time_start,
             date_time_end=date_time_end,
@@ -142,7 +142,7 @@ class TournamentModel:
         TournamentModel.tournament_path = TinyDB(full_path)
         db = TournamentModel.tournament_path
         tournament_db = db.table("Tournament")
-        self.players_list = [player.__dict__ for player in self.players_list]
+        self.participants = [player.__dict__ for player in self.participants]
         tournament_db.insert(self.__dict__)
 
 

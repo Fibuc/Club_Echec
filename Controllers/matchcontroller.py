@@ -1,7 +1,5 @@
-import copy
-
-from matchmodel import MatchModel
-from matchview import MatchView
+from Models.matchmodel import MatchModel
+from Views.matchview import MatchView
 from Models.playermodel import PlayerModel
 
 import helpers
@@ -46,17 +44,17 @@ class MatchController:
             return self.matches_by_elo(sorted_players, number_matches, all_matches_possible)
 
     def random_matches(self, players: list, number_matches: int, all_matches_possible: list) -> list:
-        players = copy.deepcopy(players)
+        players = players
         matches = []
         for _ in range(number_matches):
             helpers.shuffle_element(players)
             player_1 = players.pop()
             player_2 = players.pop()
-            match = self.new_match(player_1, player_2)
+            match = self.create_match(player_1, player_2)
             matches.append(match)
             self._remove_match_from_matches_possible(player_1, player_2, all_matches_possible)
         
-        self.show_matches(matches)
+        self.prepare_match_to_show(matches)
 
         return matches
         
@@ -70,11 +68,11 @@ class MatchController:
                 players
             )
             players.remove(player_2)
-            match = self.new_match(player_1, player_2)
+            match = self.create_match(player_1, player_2)
             matches.append(match)
             self._remove_match_from_matches_possible(player_1, player_2, all_matches_possible)
 
-        self.show_matches(matches)
+        self.prepare_match_to_show(matches)
 
         return matches
     
@@ -135,7 +133,7 @@ class MatchController:
         else:
             player_1.points += 1    
 
-    def new_match(self, player_1: PlayerModel, player_2: PlayerModel) -> tuple:
+    def create_match(self, player_1: PlayerModel, player_2: PlayerModel) -> tuple:
         return self.match_model.create_match(
             player_1_name=player_1.get_full_name(),
             player_2_name=player_2.get_full_name(),
@@ -143,7 +141,7 @@ class MatchController:
             player_2_points=player_2.points
         )
 
-    def show_matches(self, matches):
+    def prepare_match_to_show(self, matches):
         for i, match in enumerate(matches):
             self.match_view.show_match(match, i+1)
 

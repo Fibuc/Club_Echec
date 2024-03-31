@@ -1,6 +1,6 @@
 # Imports modèle et vue du player.
 from Models.playermodel import PlayerModel
-from Views.playerview import PlayerView
+from Views.playerview import PlayerView, EDITABLE_INFORMATIONS_PLAYER
 
 # Import des utilitaires.
 import helpers
@@ -25,7 +25,7 @@ class PlayerController:
                 case "1":
                     self.new_player()
                 case "2":
-                    print(2)
+                    self.modify_a_player()
                 case "3":
                     launch = False
                 case _:
@@ -36,56 +36,81 @@ class PlayerController:
         full_name = self.player_view.get_new_player_name()
         birth_date = self.player_view.get_new_player_birth_date()
         club_name = self.player_view.get_new_player_club_name()
-        first_name = full_name[0]
-        last_name = full_name[1]
         player = self.player_model.create_player(
-            first_name=first_name,
-            last_name=last_name,
+            first_name=full_name[0],
+            last_name=full_name[1],
             birth_date=birth_date,
             club_name=club_name
         )
-        self.player_view.show_new_player_created(first_name, last_name)
+        self.player_view.show_new_player_created(player.get_full_name())
         self.player_model.all_players.append(player)
         helpers.sleep_a_few_seconds()
 
-    def add_participant(self):
-        players_found = []
-        first_name = self.player_view.get_first_name()
-        for player in self.player_model.all_players:
-            if first_name in player.first_name:
-                players_found.append(player)
-        self.player_view.show_players(players_found, numbering=True)
-        self.player_view.get_player_to_modify()
-        index = self.check_user_choice(
-            self.player_view.user_choice_player,
-            players_found
+    
+    def modify_a_player(self):
+        first_name_search = self.player_view.get_first_name().capitalize()
+        matching_players = [
+            player
+            for player in self.player_model.all_players
+            if first_name_search in player.first_name
+        ]
+        if not matching_players:
+            self.player_view.show_no_match_player_found(first_name_search)
+            return
+        
+        self.player_view.show_title_players()
+        self.player_view.show_players(matching_players, numbering=True)
+        player_user_choice = self.player_view.get_index_player_to_modify()
+        index_player_to_modify = self.check_user_choice(
+            player_user_choice,
+            matching_players
         )
-        if type(index) == int:
-            player_to_modify = players_found[index]
-            player_to_modify.participation = True
-            player_to_modify.modify_player()
-            PlayerModel.participants.append(player_to_modify)
-            
-    def get_participants(self):
-        participants = [player for player in self.player_model.all_players if player.participation == True]
-        PlayerModel.participants = participants
+        if index_player_to_modify != bool:
+            player = matching_players[index_player_to_modify]
+            self.player_view.show_informations_type()
+            information_user_choice = self.player_view.get_information_to_modify()
+            index_information_to_modify = self.check_user_choice(
+                information_user_choice,
+                EDITABLE_INFORMATIONS_PLAYER
+            )
+            if index_information_to_modify != bool:
+                new_value = self.player_view.get_new_value()
+                match index_information_to_modify:
+                    case 0:
+                        player.modify_player(first_name=new_value)
+                        player.first_name = new_value
+                    case 1:
+                        player.modify_player(last_name=new_value)
+                        player.last_name = new_value
+                    case 2:
+                        player.modify_player(birth_date=new_value)
+                        player.birth_date = new_value
+                    case 3:
+                        player.modify_player(club_name=new_value)
+                        player.club_name = new_value
+
+                self.player_view.show_valid_modifications()
+                helpers.sleep_a_few_seconds()
+
+    def charge_all_players(self):
+        self.player_model.load_players()
+        self.player_model.sort_players()
 
     def check_user_choice(self, user_choice: str, list_to_control: list):
         list_lenght = [i for i in range(len(list_to_control))]
-        print(list_lenght)
         try:
             index = int(user_choice) - 1
             if index in list_lenght:
-                print(index)
                 return index
             else:
                 self.player_view.show_error_message_choice(user_choice)
                 helpers.sleep_a_few_seconds()
+                return False
 
         except ValueError:
             self.player_view.show_error_message_choice(user_choice)
             helpers.sleep_a_few_seconds()
+            return False
     
-
 
 

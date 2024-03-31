@@ -52,12 +52,11 @@ class ClubView:
     def back_to_line():
         print(helpers.BACK_TO_LINE)
 
-    def get_club_informations(self) -> list:
+    def get_club_informations(self):
         self.show_border()
         club_name = input("Quel est le nom du club ? : ")
         national_chest_id = input("Quel est sont identifiant national ? : ")
-        informations_club_list = [club_name, national_chest_id]
-        return informations_club_list
+        return club_name, national_chest_id
 
     @staticmethod
     def show_created_club(club_name: str):
@@ -69,29 +68,33 @@ class ClubView:
         print(f"Le numéro d'identifiant national \"{national_chest_id}\" n'est pas correct.")
 
     @staticmethod
-    def show_national_chest_id_not_exist(national_chest_id: str):
-        print(f"Le numéro d'identifiant national \"{national_chest_id}\" n'existe pas dans la base.")
+    def show_no_club_matching(information: str):
+        print(f"Aucun club ayant pour information \"{information}\" existe dans la base.")
 
     @staticmethod
     def show_club_informations(club_name: str, national_chest_id: str):
         print(f"ID : {national_chest_id} - Nom du club : {club_name}")
 
     @staticmethod
-    def show_void_club_list():
+    def show_empty_club_list():
         print("La liste des clubs est vide.")
 
 
-    def get_club_id_to_modify(self):
+    def get_club_to_modify(self):
         self.show_border()
-        return input("Quel est l'ID du club à modifier ? : ")
+        return input("Quel est le nom ou l'ID du club à modifier ? : ")
 
-    def get_club_name_to_modify(self):
+    def get_new_club_name(self):
         self.show_border()
         return input("Quel est son nouveau nom ? : ")
 
+    def get_confirm_choice(self, name, id):
+        self.show_border()
+        return input(f"S'agit-il bien du club \"{name} - {id}\" ? (O/N) : ").capitalize()
+
     @staticmethod
-    def show_modified_club(old_name: str, new_name: str):
-        print(f"Le club \"{old_name}\" a bien été changé en \"{new_name}\".")
+    def show_modified_club(new_name: str):
+        print(f"Le nom du club a bien été changé en \"{new_name}\".")
 
     @staticmethod
     def show_club_exist(national_chest_id):

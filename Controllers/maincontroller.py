@@ -24,8 +24,8 @@ class MainController:
 
     def run(self):
         """Lance l'éxecution de l'application"""
-        self.player.player_model.load_all_players()
-        self.player.get_participants()
+        self.player.charge_all_players()
+        self.club.club_model.load_clubs()
         # self.tournament.tournament_model.load_all_tournaments()
         self.main_view.show_welcome_message()
         self.main_menu()

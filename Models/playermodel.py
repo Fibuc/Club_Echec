@@ -11,8 +11,6 @@ class PlayerModel:
     menu_name: ClassVar[str]=menus.PLAYER_MENU[menus.NAME_MENU]
     menu_options: ClassVar[list]=menus.PLAYER_MENU[menus.OPTIONS_MENU]
     all_players: ClassVar[list]=[]
-    participants: ClassVar[list]=[]
-    number_of_player: ClassVar[int] = len(all_players)
 
     def __init__(
         self,
@@ -78,8 +76,14 @@ class PlayerModel:
             f"Participant au tournoi: {participation}"
         )
 
+    def sort_players(self):
+        PlayerModel.all_players = sorted(
+            self.all_players,
+            key=lambda x: (x.first_name, x.last_name)
+        )
+
     @classmethod
-    def load_all_players(cls):
+    def load_players(cls):
         all_players = PLAYER_DB.all()
         for player in all_players:
             cls.all_players.append(cls(**player))
@@ -99,14 +103,34 @@ class PlayerModel:
     def save_player(self):
         PLAYER_DB.insert(self.__dict__)
 
-    def modify_player(self):
+    def modify_player(
+        self,
+        first_name: str="",
+        last_name: str="",
+        birth_date: str="",
+        club_name: str="",
+        participation: str=""
+
+    ):
         Player = Query()
-        PLAYER_DB.update(
-            self.__dict__, 
-            (Player.first_name == self.first_name) & 
+        element_to_modify = {
+            "first_name": first_name,
+            "last_name": last_name,
+            "birth_date": birth_date,
+            "club_name": club_name
+        }
+        condition = (
+            (Player.first_name == self.first_name) &
             (Player.last_name == self.last_name) &
-            (Player.birth_date == self.birth_date)
+            (Player.birth_date == self.birth_date) &
+            (Player.club_name == self.club_name)
         )
+        if participation:
+            PLAYER_DB.update(self.__dict__, condition)
+        else:
+            for key, value in element_to_modify.items():
+                if value != "":
+                    PLAYER_DB.update({key: value}, condition)
     
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"

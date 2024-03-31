@@ -30,6 +30,7 @@ class ReportController:
                     self.player.player_view.show_players(
                         self.player.player_model.all_players
                     )
+                    self.report_view.press_to_back()
                 case "2":
                     self.tournament.tournament_view.show_all_tournaments(
                         self.tournament.tournament_model.all_tournaments

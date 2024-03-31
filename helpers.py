@@ -131,11 +131,12 @@ def search_description(menu_name, sub_name):
 def description_tournament(sub_name):
     result = ""
     result += (
-        f"Liste des joueurs participants: {BACK_TO_LINE}"
+        f"Liste des {len(sub_name)} joueurs participants: {BACK_TO_LINE}"
         f"{BORDER}{BACK_TO_LINE}"
     )
-    for participant in sub_name:
+    for participant in sub_name:            
         result += (f"{participant}{BACK_TO_LINE}")
+
     result += f"{BORDER}{BACK_TO_LINE}"
     return result
 

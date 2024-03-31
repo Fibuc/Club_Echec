@@ -1,9 +1,8 @@
-import copy
 from pprint import pprint
 
-from roundmodel import RoundModel
-from roundview import RoundView
-from matchcontroller import MatchController
+from Models.roundmodel import RoundModel
+from Views.roundview import RoundView
+from Controllers.matchcontroller import MatchController
 
 import helpers
 
@@ -67,7 +66,8 @@ class RoundController:
         Returns:
             fonction: Sauvegarde la nouvelle liste de match.
         """
-        all_players = copy.deepcopy(self.participants)
+        all_players = self.participants[:]
+        print(len(self.participants))
         matches = self.match_controller.get_matches(self.current_round, all_players, self.all_matches_possible)
         self.round_model.matches = matches
         self.round_model.save_round()

@@ -43,3 +43,7 @@ class ReportView:
             user_choice (str): Choix de l'utilisateur.
         """
         print(f"Erreur: La valeur \"{user_choice}\" n'est pas une commande valide.")
+
+    @staticmethod
+    def press_to_back():
+        input("Appuyez sur une touche pour quitter : ")

@@ -2,14 +2,14 @@ from typing import Callable
 
 import helpers
 
+EDITABLE_INFORMATIONS_PLAYER = [
+        "Le prénom",
+        "Le nom de famille",
+        "La date de naissance",
+        "Le club"
+]
+
 class PlayerView:
-    def __init__(
-            self,
-            user_choice_player: str="",
-            user_choice_information: str=""
-        ):
-        self.user_choice_player = user_choice_player
-        self.user_choice_information = user_choice_information
     
     # Récupération de données utilisateur
     @staticmethod
@@ -23,8 +23,8 @@ class PlayerView:
     
     @staticmethod
     def get_new_player_name():
-        first_name = input("Quel est le prénom du joueur ? : ")
-        last_name = input("Quel est le nom de famille du joueur ? : ")
+        first_name = input("Quel est le prénom du joueur ? : ").capitalize()
+        last_name = input("Quel est le nom de famille du joueur ? : ").capitalize()
         return first_name, last_name
   
     @staticmethod
@@ -41,14 +41,14 @@ class PlayerView:
 
     def get_first_name(self):
         self._show_border()
-        return input("Quel est le prénom du joueur ? : ")
+        return input("(Laisser vide pour afficher tous les joueurs)\nQuel est le prénom du joueur ? : ")
 
-    def get_player_to_modify(self):
-        self.user_choice_player = input("Quel est le numéro du joueur à modifier ? : ")
+    def get_index_player_to_modify(self):
+        return input("Quel est le numéro du joueur à modifier ? : ")
 
     def get_information_to_modify(self):
         self._show_border()
-        self.user_choice_information = input("Quel est l'information du joueur à modifier ? : ")
+        return input("Quel est l'information du joueur à modifier ? : ")
     
     @staticmethod
     def get_new_value():
@@ -87,23 +87,22 @@ class PlayerView:
         """
         print(f"Erreur: La commande \"{user_choice}\" n'est pas une commande valide.")
             
-    def show_players(self, result_list: list, numbering: bool=False):
-        self._show_border()
-        self._show_number_of_player_found(result_list)
+    def show_players(self, players: list, numbering: bool=False):
+        self._show_number_of_player_found(players)
         self._show_border()
         current_player = 0
-        for result in result_list:
+        for player in players:
             if numbering:
                 current_player += 1
-                print(f"Joueur {current_player}: {result}")
+                print(f"Joueur {current_player}: {player}")
             else:
-                print(result)
+                print(player)
 
         self._show_border()
     
     @staticmethod
-    def show_new_player_created(first_name: str, last_name: str):
-        print(f"Le nouveau joueur \"{first_name} {last_name}\" a bien été créé.")
+    def show_new_player_created(player_name: str):
+        print(f"Le nouveau joueur \"{player_name}\" a bien été créé.")
 
     @staticmethod
     def show_error_player_already_exist(first_name: str, last_name: str, birth_date: str):
@@ -124,7 +123,7 @@ class PlayerView:
     def show_informations_type(self):
         print("Liste des informations :")
         current_information = 1
-        for information in self.informations_type:
+        for information in EDITABLE_INFORMATIONS_PLAYER:
             print(f"{current_information} - {information}")
             current_information += 1
     
