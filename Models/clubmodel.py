@@ -3,7 +3,7 @@ from tinydb import TinyDB, Query
 
 import menus
 
-CLUB_DB = TinyDB(menus.SAVING_PATH_CLUB).table("Clubs")
+CLUB_DB = TinyDB(menus.SAVING_PATH_CLUB, indent=4).table("Clubs")
 
 class ClubModel:
     """Classe Club"""

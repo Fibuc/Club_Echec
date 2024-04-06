@@ -23,13 +23,12 @@ class MatchView:
         """
         print(f"Erreur: La commande \"{user_choice}\" n'est pas une commande valide.")
 
-    def show_match(self, match, current_match):
-        first_player_name = match[0][0]
-        first_player_point = match[0][1]
-        second_player_name = match[1][0]
-        second_player_point = match[1][1]
+    def show_match(
+            self, player_1_name, player_1_points,
+            player_2_name, player_2_points, current_match
+    ):
         print(
-            f"Match {current_match} - {first_player_name} "
-            f"({first_player_point} pts) VS {second_player_name} "
-            f"({second_player_point} pts)."
+            f"Match {current_match} - {player_1_name} "
+            f"({player_1_points} pts) VS {player_2_name} "
+            f"({player_2_points} pts)."
         )

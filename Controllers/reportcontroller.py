@@ -7,6 +7,7 @@ from Controllers.playercontroller import PlayerController
 from Controllers.tournamentcontroller import TournamentController
 
 # Import des utilitaires.
+import menus
 import helpers
 
 class ReportController:
@@ -32,9 +33,7 @@ class ReportController:
                     )
                     self.report_view.press_to_back()
                 case "2":
-                    self.tournament.tournament_view.show_all_tournaments(
-                        self.tournament.tournament_model.all_tournaments
-                    )
+                    self.search_tournaments()
                 case "3":
                     print("Choix 3")
                 case "4":
@@ -46,3 +45,10 @@ class ReportController:
                 case _:
                     self.report_view.show_error_message_choice(user_choice)
                     helpers.sleep_a_few_seconds()
+    
+    def search_tournaments(self):
+        all_tournament_path = [
+            tournament
+            for tournament in menus.TOURNAMENT_DIR.glob("*")
+        ]
+        

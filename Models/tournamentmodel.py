@@ -1,6 +1,6 @@
 from pathlib import Path
-from random import randint
-from tinydb import TinyDB, Query
+from tinydb import TinyDB, where
+from typing import ClassVar, Type
 
 from Models.playermodel import PlayerModel
 
@@ -9,40 +9,29 @@ import menus
 
 TOURNAMENT_DIR = menus.TOURNAMENT_DIR
 
-INDEX_PLAYER_NAME = 0
-INDEX_PLAYER_POINT = 1
-
-NOT_ENDED_TOURNAMENT_PREFIX = "Incomplete_"
-
-import json
-from typing import ClassVar
-
-
 class TournamentModel:
     """Classe Tournois"""
     menu_name: ClassVar[str]=menus.TOURNAMENT_MENU[menus.NAME_MENU]
     menu_options: ClassVar[list]=menus.TOURNAMENT_MENU[menus.OPTIONS_MENU]
-    all_tournaments: ClassVar[list]=[]
-    unfinished_tournament: ClassVar[list]=[]
-    tournament_path: ClassVar[TinyDB]
+    all_tournaments: ClassVar[list['TournamentModel']]=[]
 
     def __init__(
             self,
             name: str="",
             location: str="",
             participants: list=[],
-            rounds_list: list=[],
-            date_time_start: str="Non commencé",
-            date_time_end : str="Non terminé",
             description : str="Aucune description",
+            complete_status: bool=False,
+            tournament_path: Path=Path(TOURNAMENT_DIR),
+            tournament_db: TinyDB=None
     ):
         self.name = name
         self.location = location
         self.participants = participants
-        self.rounds_list = rounds_list
-        self.date_time_start = date_time_start
-        self.date_time_end = date_time_end
         self.description = description
+        self.complete_status = complete_status
+        self.tournament_path = tournament_path
+        self.tournament_db = tournament_db
 
     def __repr__(self) -> str:
         """Retourne la représentation de l'objet sous forme de chaîne de
@@ -54,10 +43,8 @@ class TournamentModel:
         return (
             f"TournamentModel(name='{self.name}', "
             f"location='{self.location}', players_list='{self.participants}', "
-            f"rounds_list='{self.rounds_list}', "
-            f"date_time_start={self.date_time_start}, "
-            f"date_time_end={self.date_time_end}, "
-            f"description={self.description})"
+            f"description={self.description}, "
+            f"complete_status='{self.complete_status}')"
         )
 
     def __str__(self):
@@ -67,114 +54,71 @@ class TournamentModel:
         Returns:
             str: Représentation de l'instance en chaîne de caractères.
         """
-        if self.participants:
-            players = len(self.participants)
-            plural_player = f"{"s" if players > 1 else ""}"
-        else:
-            players = 0
-            plural_player = "s"
-        if self.rounds_list:
-            rounds = len(self.rounds_list)
-            plural_round = f"{"s" if rounds > 1 else ""}"
-        else:
-            rounds = 0
-            plural_round = "s"
-
+        players = len(self.participants) if self.participants else 0
+        status = "Terminé" if self.complete_status else "Non terminé"
         return (
             f"Nom: {self.name} \tLieu: {self.location} \t"
-            f"Nombre de participant{plural_player}: {players}\t"
-            f"Nombre de round{plural_round}: {rounds}\t"
-            f"Date début: {self.date_time_start} \tDate fin: "
-            f"{self.date_time_end} \t Description: {self.description}"
+            f"Nombre de participants: {players}\t"
+            f"Description: {self.description}\t Statut: {status}"
         )
 
-    def create_new_tournament(
-            self,
-            name: str,
-            location: str,
-            players_list: list=[],
-            rounds_list: list=[],
-            date_time_start: str="Non commencé",
-            date_time_end : str="Non terminé",
-            description : str="Aucune description"
-        ):
-        """Créée une instance de la classe TournamentModel, l'ajoute à la liste
-        des instances de la classe TournamentModel et sauvegarde cette nouvelle
-        liste.
+    @classmethod
+    def load_all_tournaments(cls):
+        for tournament_file in TOURNAMENT_DIR.glob("*.json"):
+            table = TinyDB(tournament_file).table("Tournament")
+            tournament_info = (table.all())[0]
+            tournament_instance = cls(**tournament_info)
+            tournament_instance.tournament_path = tournament_file
+            cls.all_tournaments.append(tournament_instance)
 
-        Args:
-            name (str): Nom du tournoi.
-            location (str): Lieu du tournoi.
-            players_list (list): Liste des joueurs participants.
-            rounds_list (list): Liste des rounds du tournois.
-            date_time_start (str): Date du début du tournois.
-            date_time_end (str): Date de la fin du tournois.
-            description (str): Description du tournois.
-        """
+    def load_participants(self):
+        table = self._create_db_table()
+        tournament = table.all()[-1]
+        return tournament["participants"]
+
+    def create_new_tournament(
+            self, name: str, location: str, players_list: list=[]
+    ):
         tournament = TournamentModel(
-            name=name,
-            location=location,
-            participants=players_list,
-            rounds_list=rounds_list,
-            date_time_start=date_time_start,
-            date_time_end=date_time_end,
-            description=description
+            name=name, location=location, participants=players_list
         )
         TournamentModel.all_tournaments.append(tournament)
         tournament.save_tournament()
-
-    def save_tournament(self, ended_tournament: bool=False):
-        """Enregistre dans le fichier de sauvegarde toutes les instances de
-        PlayerTournament présents dans la variable 
-        PlayerTournament.all_tournaments.
-
-        Args:
-            ended_tournament (bool, optional): Indique si le tournois est
-            terminé. Defaults to False.
-        """
+        return tournament
+    
+    def save_tournament(self):
+        TOURNAMENT_DIR.mkdir(exist_ok=True, parents=True)
         date = helpers.get_date()
-        prefix = NOT_ENDED_TOURNAMENT_PREFIX
-        if ended_tournament:
-            prefix = ""
+        file_name = f"Tournament {self.name} {self.location} - {date}.json"
+        self.tournament_path = self.tournament_path / file_name
+        self.create_db_tournament()
+        table = self._create_db_table()
+        table.insert(self._serialize_tournament())
 
-        file_name = f"{prefix}Tournament {self.location} - {date}.json"
-        full_path = TOURNAMENT_DIR / file_name
-        TournamentModel.tournament_path = TinyDB(full_path)
-        db = TournamentModel.tournament_path
-        tournament_db = db.table("Tournament")
-        self.participants = [player.__dict__ for player in self.participants]
-        tournament_db.insert(self.__dict__)
+    def update_tournament(self):
+        table = self._create_db_table()
+        table.update(self._serialize_tournament())
 
+    def finish_tournament(self):
+        self.complete_status = True
+        table = self._create_db_table()
+        table.update(self._serialize_tournament())
 
+    def create_db_tournament(self):
+        self.tournament_db = TinyDB(self.tournament_path, indent=4)
 
-    @staticmethod
-    def load_all_tournaments():
-        for tournament_file in menus.TOURNAMENT_DIR.glob("*"):
-            with open(tournament_file, "r",encoding="UTF-8") as file:
-                tournament = TournamentModel(**json.load(file))
-                TournamentModel.all_tournaments.append(tournament)
+    def _serialize_tournament(self):
+        participants_dict = self._serialize_participants()
+        return {
+                "name": self.name,
+                "location": self.location,
+                "participants": participants_dict, 
+                "description": self.description, 
+                "complete_status": self.complete_status
+            }
+    
+    def _serialize_participants(self):
+        return [player.__dict__ for player in self.participants]
 
-    def load_unfinished_tournament(self):
-        unfinished_tournaments = []
-        for tournament in menus.TOURNAMENT_DIR.glob("*"):
-            if tournament.name.startswith(NOT_ENDED_TOURNAMENT_PREFIX):
-                with open(tournament, "r",encoding="UTF-8") as file:
-                    unfinished_tournaments.append(json.load(file))
-        return unfinished_tournaments
-
-
-if __name__ == '__main__':
-    tournament_model = TournamentModel()
-
-
-    player_model = PlayerModel()
-    player_1 = player_model.create_player("Jean", "Lucas", "03/04/1997", "Mélodie")
-    player_2 = player_model.create_player("Jérémy", "Louis", "08/08/1998", "Mélodie")
-    player_3 = player_model.create_player("Christophe", "Morrain", "02/12/1968", "Mélodie")
-    all_players = [player_1.__dict__, player_2.__dict__, player_3.__dict__]
-
-    tournament = tournament_model.create_new_tournament("Médium", "Nantes", all_players)
-
-
-
-
+    def _create_db_table(self):
+        return self.tournament_db.table("Tournament")

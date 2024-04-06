@@ -47,3 +47,6 @@ class ReportView:
     @staticmethod
     def press_to_back():
         input("Appuyez sur une touche pour quitter : ")
+    
+    def prepare_to_show_tournaments(self):
+        pass

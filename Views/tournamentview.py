@@ -57,10 +57,8 @@ class TournamentView:
     def get_user_choice(self):
         return input("Quel est votre choix ? : ")
 
-    def show_all_tournaments(self, result_list: list, numbering: bool=False):
-        self._show_border()
+    def show_tournament(self, numbering: bool=False):
         self._show_number_of_tournaments_found(result_list)
-        self._show_border()
         current_tournament = 0
         for result in result_list:
             if numbering:
@@ -82,3 +80,27 @@ class TournamentView:
     @staticmethod
     def _show_border():
         print(helpers.BORDER)
+
+    def show_winner(self, winner_name, winner_points):
+        print(helpers.SPACE)
+        self._show_border()
+        print(f"Fin du tournoi - Vainqueur: {winner_name} avec {winner_points} points")
+        self._show_border()
+    
+    def show_classification(self, player_name, player_points):
+        print(f"{player_name} - {player_points} points")
+
+    def waiting_enter(self):
+        self._show_border()
+        input("Appuyez sur une touche pour quitter : ")
+
+    def get_description(self):
+        self._show_border()
+        return input("Ajouter des remarques générales pour ce tournois ? : ")
+    
+    @staticmethod
+    def prompt_resume_tournament(name, location):
+        return input(
+            f"Voulez-vous reprendre le tournoi "
+            f"\"{name}\" de {location} ? (o/n) : "
+        )

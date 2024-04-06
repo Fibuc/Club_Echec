@@ -34,14 +34,13 @@ def format_date_time(now):
 
 def get_date_time():
     now = datetime.now()
-    formated_date_time = format_date_time(now)
-    return formated_date_time
+    return format_date_time(now)
 
 def get_date():
     now = datetime.now()
     return now.date()
 
-def create_menu(name_menu: str, option_list: list, description: str="") -> str:
+def create_menu(name_menu: str, option_list: list, description: str="", can_undo: bool=True) -> str:
     """Formatage du menu souhaité en chaînes de caratères.
 
     Args:
@@ -56,12 +55,11 @@ def create_menu(name_menu: str, option_list: list, description: str="") -> str:
     for option in option_list:
         all_choices.append(f"{number_of_option} - {option}")
         number_of_option += 1
-    if name_menu != menus.MAIN_MENU_NAME:
+    if name_menu != menus.MAIN_MENU_NAME and can_undo:
         all_choices.append(
             f"{number_of_option} <-- Revenir au menu précédent")
-    
-    all_choices_menu = "\n".join(all_choices)
-    return all_choices_menu
+
+    return "\n".join(all_choices)
 
 
 def decorative_menu_element(function: Callable, first_display: bool=True) -> Callable:
@@ -116,11 +114,7 @@ def show_first_display(first_display: bool) -> str:
     Returns:
         str: Espace selon l'état.
     """
-    if not first_display:
-        space = SPACE
-    else:
-        space = ""
-    return space
+    return "" if first_display else SPACE
 
 def search_description(menu_name, sub_name):
     if menu_name == menus.TOURNAMENT_MENU[menus.NAME_MENU]:
@@ -147,5 +141,10 @@ def description_round(sub_name):
 
 def shuffle_element(element_to_shuffle: list):
     return shuffle(element_to_shuffle)
+
+def convert_if_integer(number):
+    if isinstance(number, float) and number.is_integer():
+        return int(number)
+    return number
 
 

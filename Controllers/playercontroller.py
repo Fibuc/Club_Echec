@@ -42,7 +42,7 @@ class PlayerController:
             birth_date=birth_date,
             club_name=club_name
         )
-        self.player_view.show_new_player_created(player.get_full_name())
+        self.player_view.show_new_player_created(player.full_name)
         self.player_model.all_players.append(player)
         helpers.sleep_a_few_seconds()
 

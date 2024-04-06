@@ -4,7 +4,7 @@ from tinydb import TinyDB, Query
 import menus
 from helpers import DEFAULT_NUMBER_OF_POINT
 
-PLAYER_DB = TinyDB(menus.SAVING_PATH_PLAYERS).table("Players")
+PLAYER_DB = TinyDB(menus.SAVING_PATH_PLAYERS, indent=4).table("Players")
 
 class PlayerModel:
     """Classe joueur"""
@@ -55,8 +55,8 @@ class PlayerModel:
             f"PlayerModel(first_name='{self.first_name}', "
             f"last_name='{self.last_name}', club_name='{self.club_name}', "
             f"birth_date='{self.birth_date}', "
-            f"number_of_points={self.points}, "
-            f"tournament_participant={self.participation})"
+            f"participation='{self.participation}', "
+            f"points='{self.points}')"
         )
 
     def __str__(self) -> str:
@@ -65,10 +65,7 @@ class PlayerModel:
         Returns:
             str: Chaîne de caractères représentant l'objet.
         """
-        if self.participation:
-            participation = "Oui"
-        else:
-            participation = "Non"
+        participation = "Oui" if self.participation else "Non"
         return (
             f"Nom: {self.first_name} {self.last_name}\t"
             f"Date de naissance: {self.birth_date}\t"
@@ -87,6 +84,10 @@ class PlayerModel:
         all_players = PLAYER_DB.all()
         for player in all_players:
             cls.all_players.append(cls(**player))
+
+    @classmethod
+    def load_players_from_dict(cls, player):
+        return cls(**player)
 
     @staticmethod
     def create_player(first_name, last_name, birth_date, club_name):
@@ -132,5 +133,6 @@ class PlayerModel:
                 if value != "":
                     PLAYER_DB.update({key: value}, condition)
     
-    def get_full_name(self):
+    @property
+    def full_name(self):
         return f"{self.first_name} {self.last_name}"

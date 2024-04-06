@@ -10,7 +10,8 @@ class RoundView:
         menu_function: Callable,
         menu_name: str,
         options_menu: list,
-        current_round: int
+        current_round: int,
+        can_undo: bool
     ) -> list:
         """Affiche le menu formaté.
 
@@ -24,7 +25,7 @@ class RoundView:
             list: Retourne la liste des options.
         """
         decoration = helpers.decorative_menu_element(function=menu_function)
-        full_menu = decoration(menu_name, options_menu, current_round)
+        full_menu = decoration(menu_name, options_menu, current_round, can_undo)
         print(full_menu)
         return options_menu
 

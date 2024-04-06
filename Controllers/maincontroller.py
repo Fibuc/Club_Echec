@@ -24,9 +24,7 @@ class MainController:
 
     def run(self):
         """Lance l'éxecution de l'application"""
-        self.player.charge_all_players()
-        self.club.club_model.load_clubs()
-        # self.tournament.tournament_model.load_all_tournaments()
+        self.load_datas()
         self.main_view.show_welcome_message()
         self.main_menu()
         self.main_view.say_goodbye()
@@ -44,7 +42,7 @@ class MainController:
             user_choice = self.main_view.get_menu_user_choice()
             match user_choice:
                 case "1":
-                    self.tournament.tournament_menu()
+                    self.tournament.start()
                 case "2":
                     self.player.player_menu()
                 case "3":
@@ -57,3 +55,8 @@ class MainController:
                     self.main_view.show_error_message_choice(user_choice)
                     helpers.sleep_a_few_seconds()
             first_display = False
+
+    def load_datas(self):
+        self.player.charge_all_players()
+        self.tournament.tournament_model.load_all_tournaments()
+        self.club.club_model.load_clubs()
