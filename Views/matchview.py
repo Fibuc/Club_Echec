@@ -24,11 +24,17 @@ class MatchView:
         print(f"Erreur: La commande \"{user_choice}\" n'est pas une commande valide.")
 
     def show_match(
-            self, player_1_name, player_1_points,
-            player_2_name, player_2_points, current_match
+            self, player_1_name: str, player_1_points: float,
+            player_1_color: str, player_2_name: str, player_2_points: float,
+            player_2_color: str, current_match: int
     ):
         print(
-            f"Match {current_match} - {player_1_name} "
-            f"({player_1_points} pts) VS {player_2_name} "
-            f"({player_2_points} pts)."
+            f"\nMatch {current_match}: \n\tJoueur 1: {player_1_name} "
+            f"({player_1_points} pts) Couleur: {player_1_color} \n\t"
+            f"Joueur 2: {player_2_name} ({player_2_points} pts) Couleur: "
+            f"{player_2_color}."
         )
+
+    @staticmethod
+    def waiting_user_continuation():
+        input("Appuyez sur une touche pour continuer : ")

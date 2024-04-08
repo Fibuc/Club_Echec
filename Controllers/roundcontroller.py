@@ -25,7 +25,7 @@ class RoundController:
         self.current_round=current_round
         self.round_db = round_db
 
-    def round_menu(self, all_matches_played, resume: bool=False, round_start: bool=False):
+    def round_menu(self, all_matches_played: list, players_bye: list, resume: bool=False, round_start: bool=False):
         all_rounds_launch = False
         if not resume:
             self.start_new_round()  
@@ -50,7 +50,7 @@ class RoundController:
                         self.all_matches.clear()
                         self.start_new_round()
                     else:
-                        self.add_new_matchs(all_matches_played)
+                        self.add_new_matchs(all_matches_played, players_bye)
                         round_start = True
 
                 case "2":
@@ -67,14 +67,16 @@ class RoundController:
 
         return True
 
-    def add_new_matchs(self, all_matches_played):
+    def add_new_matchs(self, all_matches_played, players_bye):
         """Créée une nouvelle liste de matchs et les enregistre.
 
         Returns:
             fonction: Sauvegarde la nouvelle liste de match.
         """
         all_players = self.participants[:]
-        matches = self.match_controller.get_matches(self.current_round, all_players, all_matches_played)
+        matches = self.match_controller.get_matches(
+            self.current_round, all_players, all_matches_played, players_bye
+        )
         self.round_model.matches = matches
         self.round_model.save_round(self.round_db)
 

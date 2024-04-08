@@ -18,7 +18,7 @@ class TournamentController:
             tournament_model=TournamentModel(),
             player=PlayerController(),
             round=RoundController(),
-            all_matches_played=[]
+            all_matches_played: list=[]
     ):
         self.tournament_view = tournament_view
         self.tournament_model = tournament_model
@@ -89,6 +89,11 @@ class TournamentController:
             if first_name in player.first_name
         ]
         self.player.player_view.show_players(players_found, numbering=True)
+        if not players_found:
+            self.tournament_view.show_no_player_matching(first_name)
+            helpers.sleep_a_few_seconds()
+            return
+        
         user_choice = self.player.player_view.get_index_player_to_modify()
         index = self.player.check_user_choice(user_choice, players_found)
         if type(index) == int:
@@ -149,7 +154,10 @@ class TournamentController:
         self.round.round_db = self.tournament_model.tournament_db
 
     def start_rounds(self, resume: bool=False):
-        result = self.round.round_menu(self.all_matches_played, resume=resume)
+        result = self.round.round_menu(
+            all_matches_played=self.all_matches_played,
+            resume=resume, players_bye=self.tournament_model.players_bye
+        )
         self.evaluate_show_classification(result)
         self.round.reset_participants_points()
         
@@ -161,6 +169,7 @@ class TournamentController:
 
             self.tournament_model.finish_tournament()
             self.all_matches_played.clear()
+            self.tournament_model.players_bye.clear()
         else:
             self.tournament_model.update_tournament()
 

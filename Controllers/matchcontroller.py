@@ -14,7 +14,10 @@ class MatchController:
         self.match_view=match_view
         self.match_model=match_model
     
-    def get_matches(self, current_round: int, players: list, all_matches_played: list) -> list:
+    def get_matches(
+        self, current_round: int, players: list,
+        all_matches_played: list, players_bye: list
+    ) -> list:
         """Récupère et retourne les matchs.
 
         Args:
@@ -24,9 +27,12 @@ class MatchController:
         Returns:
             list: Retourne la liste des matchs
         """
-        return self.evaluate_type_match(current_round, players, all_matches_played)
+        return self.evaluate_type_match(current_round, players, all_matches_played, players_bye)
         
-    def evaluate_type_match(self, current_round: int, players: list, all_matches_played: list) -> list:
+    def evaluate_type_match(
+        self, current_round: int, players: list,
+        all_matches_played: list, players_bye: list
+    ) -> list:
         """Lance le type de match selon le round actuel.
 
         Args:
@@ -38,26 +44,34 @@ class MatchController:
         """
         number_matches = len(players) // PLAYER_PER_MATCH
         if current_round == 1:
-            return self.random_matches(players, number_matches, all_matches_played)
+            return self.random_matches(players, number_matches, all_matches_played, players_bye)
         else:
-            return self.matches_by_elo(players, number_matches, all_matches_played)
+            return self.matches_by_elo(players, number_matches, all_matches_played, players_bye)
 
-    def random_matches(self, players: list, number_matches: int, all_matches_played: list) -> list:
-        players = players
+    def random_matches(
+        self, players: list[PlayerModel], number_matches: int,
+        all_matches_played: list, players_bye: list
+    ) -> list:
         matches = []
         for _ in range(number_matches):
             helpers.shuffle_element(players)
             player_1 = players.pop()
             player_2 = players.pop()
-            match = self.create_match(player_1, player_2)
+            match = self.serialize_player_to_create_match(player_1, player_2)
             matches.append(match)
             self.add_to_match_played(player_1, player_2, all_matches_played)
         
         self.prepare_match_to_show(matches)
+        if len(players) == 1:
+            players_bye.append(players[0].full_name)
 
         return matches
         
-    def matches_by_elo(self, players: list[PlayerModel], number_matches: int, all_matches_played: list) -> list:
+    def matches_by_elo(
+        self, players: list[PlayerModel], number_matches: int,
+        all_matches_played: list, players_bye: list
+    ) -> list:
+        self.bye_player_if_odd(players, players_bye)
         matches = []
         max_test_number = 50
         found = False
@@ -130,7 +144,9 @@ class MatchController:
             player_1.points += 1
             helpers.convert_if_integer(player_1.points)
 
-    def create_match(self, player_1: PlayerModel, player_2: PlayerModel) -> tuple:
+    def serialize_player_to_create_match(
+            self, player_1: PlayerModel, player_2: PlayerModel
+    ) -> tuple:
         return self.match_model.create_match(
             player_1_name=player_1.full_name,
             player_2_name=player_2.full_name,
@@ -144,21 +160,26 @@ class MatchController:
             player_1_points = match[0][1]
             player_2_name = match[1][0]
             player_2_points = match[1][1]
+            player_1_color, player_2_color = self._color_choice()
             self.match_view.show_match(
-                player_1_name, player_1_points, 
-                player_2_name, player_2_points, i+1
+                player_1_name=player_1_name, player_1_points=player_1_points,
+                player_1_color=player_1_color, player_2_name=player_2_name,
+                player_2_points=player_2_points,
+                player_2_color=player_2_color, current_match= i+1
             )
+        self.match_view.waiting_user_continuation()
 
     @staticmethod
-    def sort_by_elo(players: list):
+    def sort_by_elo(players: list[PlayerModel]) -> list[PlayerModel]:
         return sorted(
             players, key=lambda player:(-player.points)
         )
 
     @staticmethod
-    def color_choice():
+    def _color_choice():
         colors = COLORS[:]
-        first_color = helpers.shuffle_element(colors)
+        helpers.shuffle_element(colors)
+        first_color = colors.pop()
         second_color = colors.pop()
         return first_color, second_color
 
@@ -169,7 +190,7 @@ class MatchController:
     def generate_ranked_match(self, players, all_matches_played):
         player_1 = players[0]
         if player_2 := self.get_concurrent(player_1, players, all_matches_played):
-            match = self.create_match(player_1, player_2)
+            match = self.serialize_player_to_create_match(player_1, player_2)
             self.remove_from_players_to_pairing(players, player_1, player_2)
             return match
 
@@ -179,8 +200,18 @@ class MatchController:
         player_1 = players[0]
         player_2 = players[1]
         self.remove_from_players_to_pairing(players, player_1, player_2)
-        return self.create_match(player_1, player_2)
+        return self.serialize_player_to_create_match(player_1, player_2)
     
     def remove_from_players_to_pairing(self, players: list, player_1, player_2):
         players.remove(player_1)
         players.remove(player_2)
+    
+    def bye_player_if_odd(self, players: list[PlayerModel], players_bye: list):
+        if len(players) % 2 != 0:
+            helpers.shuffle_element(players)
+            sorted_players = self.sort_by_elo(players)[::-1]
+            for player in sorted_players:
+                if player.full_name not in players_bye:
+                    players_bye.append(player.full_name)
+                    players.remove(player)
+                    break

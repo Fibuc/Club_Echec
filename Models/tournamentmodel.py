@@ -1,8 +1,7 @@
 from pathlib import Path
-from tinydb import TinyDB, where
-from typing import ClassVar, Type
+from tinydb import TinyDB
+from typing import ClassVar
 
-from Models.playermodel import PlayerModel
 
 import helpers
 import menus 
@@ -20,6 +19,7 @@ class TournamentModel:
             name: str="",
             location: str="",
             participants: list=[],
+            players_bye: list=[],
             description : str="Aucune description",
             complete_status: bool=False,
             tournament_path: Path=Path(TOURNAMENT_DIR),
@@ -28,6 +28,7 @@ class TournamentModel:
         self.name = name
         self.location = location
         self.participants = participants
+        self.players_bye = players_bye
         self.description = description
         self.complete_status = complete_status
         self.tournament_path = tournament_path
@@ -112,7 +113,8 @@ class TournamentModel:
         return {
                 "name": self.name,
                 "location": self.location,
-                "participants": participants_dict, 
+                "participants": participants_dict,
+                "players_bye": self.players_bye,
                 "description": self.description, 
                 "complete_status": self.complete_status
             }

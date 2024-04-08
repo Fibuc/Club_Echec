@@ -52,7 +52,7 @@ class PlayerView:
     
     @staticmethod
     def get_new_value():
-        return input(f"Quelle est la nouvelle valeur ? : ")
+        return input("Quelle est la nouvelle valeur ? : ")
   
     # Affichage des données à l'utilisateur
     @staticmethod

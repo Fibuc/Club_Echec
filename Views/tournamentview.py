@@ -104,3 +104,9 @@ class TournamentView:
             f"Voulez-vous reprendre le tournoi "
             f"\"{name}\" de {location} ? (o/n) : "
         )
+    
+    @staticmethod
+    def show_no_player_matching(player_name):
+        print(f"Il n'y a aucun joueur existant ayant pour nom \"{player_name}\" "
+              f"dans la base de données"
+        )
