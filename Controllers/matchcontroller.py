@@ -57,24 +57,29 @@ class MatchController:
 
         return matches
         
-    def matches_by_elo(self, players: list, number_matches: int, all_matches_played: list) -> list:
+    def matches_by_elo(self, players: list[PlayerModel], number_matches: int, all_matches_played: list) -> list:
         matches = []
+        max_test_number = 50
         found = False
-        test = 1
+        test = 0
         while not found:
+            restart = False
             helpers.shuffle_element(players)
             sorted_players = self.sort_by_elo(players)
-            try :
-                for _ in range(number_matches):
-                    player_1 = sorted_players.pop(0)
-                    player_2 = self.get_concurrent(player_1, sorted_players, all_matches_played)
-                    sorted_players.remove(player_2)
-                    match = self.create_match(player_1, player_2)
-                    matches.append(match)
+            for _ in range(number_matches):
+                match = self.generate_ranked_match(sorted_players, all_matches_played)
+                if not match:
+                    test += 1
+                    if test < max_test_number:
+                        restart = True
+                        break
+                    else:
+                        match = self.generate_already_played_match(sorted_players)
 
-            except ValueError:
+                matches.append(match)
+
+            if restart:
                 matches.clear()
-                test += 1
                 continue
 
             found = True
@@ -96,7 +101,7 @@ class MatchController:
             for match in all_matches_played
             if match[0] == player_1.full_name
         }
-        concurrents_names = {player.full_name for player in players}
+        concurrents_names = {player.full_name for player in players if player.full_name != player_1.full_name}
         available_concurrent = concurrents_names - already_played
         for player in players:
             if player.full_name in available_concurrent:
@@ -161,3 +166,21 @@ class MatchController:
         match = player_1.full_name, player_2.full_name
         all_matches_played.extend((match, match[::-1]))
     
+    def generate_ranked_match(self, players, all_matches_played):
+        player_1 = players[0]
+        if player_2 := self.get_concurrent(player_1, players, all_matches_played):
+            match = self.create_match(player_1, player_2)
+            self.remove_from_players_to_pairing(players, player_1, player_2)
+            return match
+
+        return False
+    
+    def generate_already_played_match(self, players):
+        player_1 = players[0]
+        player_2 = players[1]
+        self.remove_from_players_to_pairing(players, player_1, player_2)
+        return self.create_match(player_1, player_2)
+    
+    def remove_from_players_to_pairing(self, players: list, player_1, player_2):
+        players.remove(player_1)
+        players.remove(player_2)

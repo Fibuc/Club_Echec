@@ -160,6 +160,7 @@ class TournamentController:
                 self.tournament_model.description = description
 
             self.tournament_model.finish_tournament()
+            self.all_matches_played.clear()
         else:
             self.tournament_model.update_tournament()
 
