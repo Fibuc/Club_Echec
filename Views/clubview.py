@@ -72,8 +72,12 @@ class ClubView:
         print(f"Aucun club ayant pour information \"{information}\" existe dans la base.")
 
     @staticmethod
-    def show_club_informations(club_name: str, national_chest_id: str):
-        print(f"ID : {national_chest_id} - Nom du club : {club_name}")
+    def show_club(club_name: str, national_chest_id: str, current_club: int=-1):
+        message = ""
+        if current_club != -1:
+            message += f"Club {current_club}: "
+        message += f"Nom: {club_name}\tID: {national_chest_id}"
+        print(message)
 
     @staticmethod
     def show_empty_club_list():

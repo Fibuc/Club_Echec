@@ -122,17 +122,23 @@ class MatchController:
                 return player
 
     def get_winner(self, player_1: PlayerModel, player_2: PlayerModel):
-        result = self.match_view.get_result_of_match(player_1.full_name, player_2.full_name)
-        if result in OPTIONS_WINNER:
-            match result:
-                case "1":
-                    self.add_score_to_player(player_1)
-                case "2":
-                    self.add_score_to_player(player_2)
-                case "3":
-                    self.add_score_to_player(player_1, player_2)
-        else:
-            self.match_view.show_error_message_choice(result)
+        valid_choice = False
+        while not valid_choice:
+            result = self.match_view.get_result_of_match(player_1.full_name, player_2.full_name)
+            if result in OPTIONS_WINNER:
+                match result:
+                    case "1":
+                        self.add_score_to_player(player_1)
+                        valid_choice = True
+                    case "2":
+                        self.add_score_to_player(player_2)
+                        valid_choice = True
+                    case "3":
+                        self.add_score_to_player(player_1, player_2)
+                        valid_choice = True
+            else:
+                self.match_view.show_error_message_choice(result)
+                helpers.sleep_a_few_seconds()
 
     def add_score_to_player(self, player_1: PlayerModel, player_2: PlayerModel=None):
         if player_2:

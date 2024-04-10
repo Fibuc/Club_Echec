@@ -48,8 +48,18 @@ class RoundView:
         """
         print(f"Erreur: La commande \"{user_choice}\" n'est pas une commande valide.")
 
-
-
     def show_error_message(self, user_choice):
         print(f"La commande \"{user_choice}\" n'est pas valide.")
     
+    def show_rounds(self, current_round, start_date, end_date, matches):
+        print(
+            f"Round {current_round}:\n\tDébut: {start_date}"
+            f"\n\tFin: {end_date}\n\tMatchs:"
+        )
+        self._show_matches(matches)
+    
+    @staticmethod
+    def _show_matches(matches):
+        for i, match in enumerate(matches, start=1):
+            print(f"\t\t{i} - {match[0][0]} ({match[0][1]} pts) contre {match[1][0]} ({match[1][1]} pts)")
+        print()

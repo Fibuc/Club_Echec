@@ -65,7 +65,7 @@ class PlayerController:
             player_user_choice,
             matching_players
         )
-        if index_player_to_modify != bool:
+        if not isinstance(index_player_to_modify, bool):
             player = matching_players[index_player_to_modify]
             self.player_view.show_informations_type()
             information_user_choice = self.player_view.get_information_to_modify()
@@ -73,7 +73,7 @@ class PlayerController:
                 information_user_choice,
                 EDITABLE_INFORMATIONS_PLAYER
             )
-            if index_information_to_modify != bool:
+            if not isinstance(index_information_to_modify, bool):
                 new_value = self.player_view.get_new_value()
                 match index_information_to_modify:
                     case 0:
@@ -97,7 +97,7 @@ class PlayerController:
         self.player_model.sort_players()
 
     def check_user_choice(self, user_choice: str, list_to_control: list):
-        list_lenght = [i for i in range(len(list_to_control))]
+        list_lenght = list(range(len(list_to_control)))
         try:
             index = int(user_choice) - 1
             if index in list_lenght:

@@ -9,7 +9,7 @@ class ClubModel:
     """Classe Club"""
     menu_name: ClassVar[str]=menus.CLUB_MENU[menus.NAME_MENU]
     menu_options: ClassVar[list]=menus.CLUB_MENU[menus.OPTIONS_MENU]
-    all_clubs: ClassVar[list]=[]
+    all_clubs: ClassVar[list['ClubModel']]=[]
 
     def __init__(
             self,

@@ -18,13 +18,15 @@ class TournamentController:
             tournament_model=TournamentModel(),
             player=PlayerController(),
             round=RoundController(),
-            all_matches_played: list=[]
+            all_matches_played: list=[],
+            all_rounds: list=[]
     ):
         self.tournament_view = tournament_view
         self.tournament_model = tournament_model
         self.player = player
         self.round = round
         self.all_matches_played = all_matches_played
+        self.all_rounds = all_rounds
 
     def start(self):
         unfinished_tournaments = self.check_unfinished_tounament()
@@ -53,6 +55,7 @@ class TournamentController:
                 case "1":
                     self.new_tournament()
                     self.sync_round_with_tournament()
+                    self.player.player_model.clear_participants()
                     self.start_rounds()
                 case "2":
                     self.add_participant()
@@ -99,12 +102,7 @@ class TournamentController:
         if type(index) == int:
             player_to_modify = players_found[index]
             player_to_modify.participation = player_to_modify.participation != True
-            player_to_modify.modify_player(participation=True)
-
-    def end_tournament(self, description):
-        """Termine le tournois."""
-        self.description = description
-        self.date_time_end = helpers.get_date()
+            player_to_modify.modify_player(modify_participation=True)
 
     def classification(self, rounds_result):
         all_players = self.round.match_controller.sort_by_elo(rounds_result)
@@ -160,12 +158,11 @@ class TournamentController:
         )
         self.evaluate_show_classification(result)
         self.round.reset_participants_points()
-        
+
     def evaluate_show_classification(self, result):
         if result:
             self.classification(self.tournament_model.participants)
-            if description := self.tournament_view.get_description():
-                self.tournament_model.description = description
+            self.get_description()
 
             self.tournament_model.finish_tournament()
             self.all_matches_played.clear()
@@ -182,3 +179,12 @@ class TournamentController:
                 return tournament
 
         return False
+    
+    def get_description(self):
+        while True:
+            if description := self.tournament_view.get_description():
+                self.tournament_model.description = description
+            else:
+                confirm_choice = self.tournament_view.get_confirm_choice()
+                if confirm_choice in ["o", "O"]:
+                    return

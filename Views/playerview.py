@@ -113,8 +113,8 @@ class PlayerView:
         print("Il n'y a aucun joueur dans la base de données.")
     
     @staticmethod
-    def show_no_match_player_found(prenom):
-        print(f"Il n'y a aucun joueur ayant pour prénom \"{prenom}\" dans la base de données.")
+    def show_no_match_player_found(first_name):
+        print(f"Il n'y a aucun joueur ayant pour prénom \"{first_name}\" dans la base de données.")
     
     @staticmethod
     def show_no_paticipants(): # Pas utilisé !!!
@@ -122,10 +122,8 @@ class PlayerView:
 
     def show_informations_type(self):
         print("Liste des informations :")
-        current_information = 1
-        for information in EDITABLE_INFORMATIONS_PLAYER:
-            print(f"{current_information} - {information}")
-            current_information += 1
+        for i, information in enumerate(EDITABLE_INFORMATIONS_PLAYER, start=1):
+            print(f"{i} - {information}")
     
     def show_title_players(self): # Pas utilisé !!!
         self._show_border()

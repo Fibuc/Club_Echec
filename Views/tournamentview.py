@@ -57,25 +57,20 @@ class TournamentView:
     def get_user_choice(self):
         return input("Quel est votre choix ? : ")
 
-    def show_tournament(self, numbering: bool=False):
-        self._show_number_of_tournaments_found(result_list)
-        current_tournament = 0
-        for result in result_list:
-            if numbering:
-                current_tournament += 1
-                print(f"Tournois {current_tournament}: \t{result}")
-            else:
-                print(result)
-
-        self._show_border()
+    def show_tournament(self, tournament, current_tournament: int=-1):
+        message = ""
+        if current_tournament != -1:
+            message += f"Tournois {current_tournament}:\n"
+        tournament = "\n".join("\t" + "- " + line for line in str(tournament).split("\n"))
+        message += f"{tournament}\n"
+        print(message)
 
     @staticmethod
-    def _show_number_of_tournaments_found(result_list: list):
-        result_numer = len(result_list)
+    def show_number_of_tournaments_found(number_of_tournament: int):
         plural_choice = (
-            f"{'s ont été trouvés.' if result_numer > 1 else " a été trouvé."}"
+            f"{'s trouvés.' if number_of_tournament > 1 else " trouvé."}"
         )
-        print(f"Résultat: {result_numer} tournoi{plural_choice} ")
+        print(f"Résultat: {number_of_tournament} tournoi{plural_choice} ")
 
     @staticmethod
     def _show_border():
@@ -90,13 +85,9 @@ class TournamentView:
     def show_classification(self, player_name, player_points):
         print(f"{player_name} - {player_points} points")
 
-    def waiting_enter(self):
-        self._show_border()
-        input("Appuyez sur une touche pour quitter : ")
-
     def get_description(self):
         self._show_border()
-        return input("Ajouter des remarques générales pour ce tournois ? : ")
+        return input("Ecrivez des remarques générales de ce tournois : ")
     
     @staticmethod
     def prompt_resume_tournament(name, location):
@@ -110,3 +101,7 @@ class TournamentView:
         print(f"Il n'y a aucun joueur existant ayant pour nom \"{player_name}\" "
               f"dans la base de données"
         )
+    
+    @staticmethod
+    def get_confirm_choice():
+        return input("Êtes-vous sûr de ne pas laisser de remarques ? (o/n) : ")

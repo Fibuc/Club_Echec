@@ -30,7 +30,11 @@ def format_date_time(now):
     """
     date = now.date()
     time = f"{now.hour}:{now.minute}:{now.second}"
-    return f"{date} {time}"
+    return f"{date.strftime("%d/%m/%Y")} {time}"
+
+def format_date(date):
+    date = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+    return date.strftime("%d/%m/%Y %H:%M:%S")
 
 def get_date_time():
     now = datetime.now()
@@ -121,6 +125,8 @@ def search_description(menu_name, sub_name):
         return description_tournament(sub_name)
     elif menu_name == menus.ROUND_MENU[menus.NAME_MENU]:
         return description_round(sub_name)
+    elif menu_name == menus.TOURNAMENT_REPORT_MENU[menus.NAME_MENU]:
+        return description_tournament_report(sub_name)
     
 def description_tournament(sub_name):
     result = ""
@@ -147,4 +153,10 @@ def convert_if_integer(number):
         return int(number)
     return number
 
-
+def description_tournament_report(sub_name):
+    result = ""
+    result += (
+        f"Nom: {sub_name[0]}\nLieu: {sub_name[1]}\nDate début: {sub_name[2]}"
+        f"\nDate de fin: {sub_name[3]}{BACK_TO_LINE}{BORDER}{BACK_TO_LINE}"
+    )
+    return result

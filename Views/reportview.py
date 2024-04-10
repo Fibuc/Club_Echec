@@ -6,9 +6,7 @@ class ReportView:
 
     @staticmethod
     def show_menu(
-        menu_function: Callable,
-        menu_name: str,
-        options_menu: list
+        menu_function: Callable, menu_name: str, options_menu: list
     ) -> list:
         """Affiche le menu formaté.
 
@@ -35,6 +33,16 @@ class ReportView:
             return input("Quel est votre choix ? : ")
 
     @staticmethod
+    def waiting_user_continuation():
+        input("Appuyez sur une touche pour continuer : ")
+
+    @staticmethod
+    def get_tournament_to_show():
+         print(helpers.BORDER)
+         print("(Laisser vide pour annuler)")
+         return input("Quel est le tournois que vous voulez afficher ? : ")
+    
+    @staticmethod
     def show_error_message_choice(user_choice: str):
         """Affiche un message d'erreur lorsque le choix de l'utilisateur
         n'est pas correct.
@@ -42,11 +50,14 @@ class ReportView:
         Args:
             user_choice (str): Choix de l'utilisateur.
         """
-        print(f"Erreur: La valeur \"{user_choice}\" n'est pas une commande valide.")
+        print(f"Erreur: La commande \"{user_choice}\" n'est pas une commande valide.")
 
     @staticmethod
-    def press_to_back():
-        input("Appuyez sur une touche pour quitter : ")
-    
-    def prepare_to_show_tournaments(self):
-        pass
+    def menu_tournament_report(
+        menu_function: Callable, menu_name: str, options_menu: list, dates
+    ):
+        decoration = helpers.decorative_menu_element(function=menu_function)
+        full_menu = decoration(menu_name, options_menu, dates)
+        print(full_menu)
+        return options_menu
+         

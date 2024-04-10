@@ -10,7 +10,7 @@ class PlayerModel:
     """Classe joueur"""
     menu_name: ClassVar[str]=menus.PLAYER_MENU[menus.NAME_MENU]
     menu_options: ClassVar[list]=menus.PLAYER_MENU[menus.OPTIONS_MENU]
-    all_players: ClassVar[list]=[]
+    all_players: ClassVar[list['PlayerModel']]=[]
 
     def __init__(
         self,
@@ -110,7 +110,7 @@ class PlayerModel:
         last_name: str="",
         birth_date: str="",
         club_name: str="",
-        participation: str=""
+        modify_participation: bool=False
 
     ):
         Player = Query()
@@ -126,13 +126,19 @@ class PlayerModel:
             (Player.birth_date == self.birth_date) &
             (Player.club_name == self.club_name)
         )
-        if participation:
+        if modify_participation:
             PLAYER_DB.update(self.__dict__, condition)
         else:
             for key, value in element_to_modify.items():
                 if value != "":
                     PLAYER_DB.update({key: value}, condition)
     
+    @classmethod
+    def clear_participants(cls):
+        for player in cls.all_players:
+            player.participation = False
+            player.modify_player(modify_participation=True)
+
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"

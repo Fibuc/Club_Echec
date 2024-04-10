@@ -58,9 +58,8 @@ class TournamentModel:
         players = len(self.participants) if self.participants else 0
         status = "Terminé" if self.complete_status else "Non terminé"
         return (
-            f"Nom: {self.name} \tLieu: {self.location} \t"
-            f"Nombre de participants: {players}\t"
-            f"Description: {self.description}\t Statut: {status}"
+            f"Nom: {self.name}\nLieu: {self.location}\n"
+            f"Description: {self.description}\nStatut: {status}"
         )
 
     @classmethod
