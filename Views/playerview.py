@@ -136,7 +136,7 @@ class PlayerView:
  
     @staticmethod
     def show_error_date(birth_date):
-        print(f"La date \"{birth_date}\" n'est pas valide.")
+        print(f"Date \"{birth_date}\" invalide. Le format doit être en JJ/MM/AAAA.")
 
     @staticmethod
     def _show_number_of_player_found(result_list: list):
@@ -149,3 +149,14 @@ class PlayerView:
     @staticmethod
     def _show_border():
         print(helpers.BORDER)
+
+    @staticmethod
+    def show_error_empty_names():
+        print("Erreur: Le prénom ou le nom de famille ne peuvent pas être vides.")
+
+    @staticmethod
+    def show_error_characteres_names():
+        print(
+            "Erreur: Le nom ou prénom d'un joueur ne peuvent pas "
+            "contenir de chiffres ou de caractères spéciaux."
+        )

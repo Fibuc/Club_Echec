@@ -1,16 +1,19 @@
 # Imports modèle et vue du player.
+from datetime import datetime
 from Models.playermodel import PlayerModel
 from Views.playerview import PlayerView, EDITABLE_INFORMATIONS_PLAYER
+from Controllers.clubcontroller import ClubController
+
+import string
 
 # Import des utilitaires.
 import helpers
-
-
 
 class PlayerController:
     def __init__(self):
         self.player_view = PlayerView()
         self.player_model = PlayerModel()
+        self.club = ClubController()
 
     def player_menu(self):
         launch = True
@@ -33,14 +36,23 @@ class PlayerController:
                     helpers.sleep_a_few_seconds()
 
     def new_player(self):
-        full_name = self.player_view.get_new_player_name()
+        first_name, last_name = self.player_view.get_new_player_name()
+        if not self._check_names(first_name, last_name):
+            return
         birth_date = self.player_view.get_new_player_birth_date()
-        club_name = self.player_view.get_new_player_club_name()
+        if not self._check_birth_date(birth_date):
+            return
+        club_name = self.club.select_club()
+        if not club_name:
+            return
+        participation = self.player_view.get_new_player_participation()
+        participation = participation in ["o", "O"]
         player = self.player_model.create_player(
-            first_name=full_name[0],
-            last_name=full_name[1],
+            first_name=first_name,
+            last_name=last_name,
             birth_date=birth_date,
-            club_name=club_name
+            club_name=club_name,
+            participation=participation
         )
         self.player_view.show_new_player_created(player.full_name)
         self.player_model.all_players.append(player)
@@ -57,7 +69,7 @@ class PlayerController:
         if not matching_players:
             self.player_view.show_no_match_player_found(first_name_search)
             return
-        
+
         self.player_view.show_title_players()
         self.player_view.show_players(matching_players, numbering=True)
         player_user_choice = self.player_view.get_index_player_to_modify()
@@ -74,20 +86,36 @@ class PlayerController:
                 EDITABLE_INFORMATIONS_PLAYER
             )
             if not isinstance(index_information_to_modify, bool):
-                new_value = self.player_view.get_new_value()
                 match index_information_to_modify:
                     case 0:
+                        new_value = self.player_view.get_new_value()
+                        if not self._check_a_name(new_value):
+                            return
+                        
+                        new_value = new_value.capitalize()
                         player.modify_player(first_name=new_value)
                         player.first_name = new_value
                     case 1:
+                        new_value = self.player_view.get_new_value()
+                        if not self._check_a_name(new_value):
+                            return
+                        
+                        new_value = new_value.capitalize()
                         player.modify_player(last_name=new_value)
                         player.last_name = new_value
                     case 2:
+                        new_value = self.player_view.get_new_value()
+                        if not self._check_birth_date(new_value):
+                            return
+                        
                         player.modify_player(birth_date=new_value)
                         player.birth_date = new_value
                     case 3:
-                        player.modify_player(club_name=new_value)
-                        player.club_name = new_value
+                        club_name = self.club.select_club()
+                        if not club_name:
+                            return
+                        player.modify_player(club_name=club_name)
+                        player.club_name = club_name
 
                 self.player_view.show_valid_modifications()
                 helpers.sleep_a_few_seconds()
@@ -111,6 +139,45 @@ class PlayerController:
             self.player_view.show_error_message_choice(user_choice)
             helpers.sleep_a_few_seconds()
             return False
+        
+    def _check_names(self, first_name: str, last_name: str):
+        special_characteres = string.punctuation + string.digits
+        names_to_check = first_name + last_name
+        if any(charactere in special_characteres for charactere in names_to_check):
+            self.show_error_characteres()
+            return False
+        
+        elif not (first_name and last_name):
+            self.show_empty_names()
+            return False
+        
+        return True
+
+    def _check_a_name(self, name: str):
+        special_characteres = string.punctuation + string.digits
+        if any(charactere in special_characteres for charactere in name):
+            self.show_error_characteres()
+            return False
+        
+        elif not name:
+            self.show_empty_names()
+            return False
+        
+        return True
+
+    def _check_birth_date(self, birth_date):
+        try:
+            birth_date = datetime.strptime(birth_date, "%d/%m/%Y")
+            return True
+        except ValueError:
+            self.player_view.show_error_date(birth_date)
+            helpers.sleep_a_few_seconds()
+            return False
     
+    def show_empty_names(self):
+        self.player_view.show_error_empty_names()
+        helpers.sleep_a_few_seconds()
 
-
+    def show_error_characteres(self):
+        self.player_view.show_error_characteres_names()
+        helpers.sleep_a_few_seconds()

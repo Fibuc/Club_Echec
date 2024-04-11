@@ -1,3 +1,5 @@
+import string
+
 # Imports modèle et vue du tournament.
 from Controllers.roundcontroller import RoundController
 from Models.tournamentmodel import TournamentModel
@@ -53,7 +55,8 @@ class TournamentController:
             user_choice = self.tournament_view.get_menu_user_choice()
             match user_choice:
                 case "1":
-                    self.new_tournament()
+                    if not self.new_tournament():
+                        continue
                     self.sync_round_with_tournament()
                     self.player.player_model.clear_participants()
                     self.start_rounds()
@@ -66,8 +69,14 @@ class TournamentController:
                     helpers.sleep_a_few_seconds()
 
     def new_tournament(self):
+        if not self._check_number_participants():
+            return False
+        
         self.tournament_model.name = self.tournament_view.get_tournament_name()
         self.tournament_model.location = self.tournament_view.get_tournament_location()
+        if not self._check_name_location():
+            return False
+        
         self.tournament_model = self.tournament_model.create_new_tournament(
             name=self.tournament_model.name,
             location=self.tournament_model.location,
@@ -78,6 +87,7 @@ class TournamentController:
             self.tournament_model.location
         )
         helpers.sleep_a_few_seconds()
+        return True
 
     def get_participants(self):
         all_players = self.player.player_model.all_players
@@ -184,7 +194,32 @@ class TournamentController:
         while True:
             if description := self.tournament_view.get_description():
                 self.tournament_model.description = description
+                return
             else:
                 confirm_choice = self.tournament_view.get_confirm_choice()
                 if confirm_choice in ["o", "O"]:
                     return
+    
+    def _check_name_location(self):
+        name_to_check = self.tournament_model.name + self.tournament_model.location
+        if any(charactere in string.punctuation for charactere in name_to_check):
+            self.tournament_view.show_error_characteres_name()
+            helpers.sleep_a_few_seconds()
+            return False
+        elif not (self.tournament_model.name and self.tournament_model.location):
+            self.tournament_view.show_error_empty_name()
+            helpers.sleep_a_few_seconds()
+            return False
+        
+        return True
+
+    def _check_number_participants(self):
+        number_of_participants = len(self.tournament_model.participants)
+        if number_of_participants < helpers.MINIMUM_PLAYER_FOR_TOURNAMENT:
+            self.tournament_view.show_not_enough_participants(
+                number_of_participants
+            )
+            helpers.sleep_a_few_seconds()
+            return False
+        
+        return True

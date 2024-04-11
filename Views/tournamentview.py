@@ -105,3 +105,21 @@ class TournamentView:
     @staticmethod
     def get_confirm_choice():
         return input("Êtes-vous sûr de ne pas laisser de remarques ? (o/n) : ")
+    
+    @staticmethod
+    def show_error_characteres_name():
+        print(
+            "Erreur: Le nom d'un tournois ou le lieu ne peuvent pas "
+            "contenir de caractères spéciaux."
+        )
+    
+    @staticmethod
+    def show_error_empty_name():
+        print("Erreur: Le nom du tournois ou le lieu ne peuvent pas être vides.")
+
+    @staticmethod
+    def show_not_enough_participants(number_of_participants):
+        print(
+            f"Erreur: Il faut minimum {helpers.MINIMUM_PLAYER_FOR_TOURNAMENT} "
+            f"participants pour lancer un tournoi. Actuellement "
+            f"{number_of_participants} participants.")

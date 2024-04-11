@@ -37,6 +37,7 @@ class ReportController:
                 case "2":
                     self.show_all_clubs()
                 case "3":
+                    self.refresh_tournaments()
                     self.show_all_tournaments()
                     if self.get_tournament():
                         self.tournament_report_menu()
@@ -47,6 +48,9 @@ class ReportController:
                     helpers.sleep_a_few_seconds()
     
     def show_all_players(self):
+        self.player.player_model.all_players = sorted(
+            self.player.player_model.all_players, key=lambda player:player.first_name
+        )
         self.player.player_view.show_players(
             self.player.player_model.all_players
                     )
@@ -75,7 +79,7 @@ class ReportController:
     
     def get_tournament(self):
         user_choice = self.report_view.get_tournament_to_show()
-        if self.check_user_choice(user_choice):
+        if self._check_user_choice(user_choice):
             self.tournament.tournament_model = (
                 self.tournament.tournament_model.all_tournaments[
                     int(user_choice) - 1
@@ -121,7 +125,7 @@ class ReportController:
                     self.report_view.show_error_message_choice(user_choice)
                     helpers.sleep_a_few_seconds()
 
-    def check_user_choice(self, user_choice):
+    def _check_user_choice(self, user_choice):
         options = [
             str(i) for i in range(
                 1, len(self.tournament.tournament_model.all_tournaments) + 1
@@ -130,6 +134,13 @@ class ReportController:
         return user_choice in options
 
     def show_participants(self):
+        if not any(
+            isinstance(player, dict)
+            for player in self.tournament.tournament_model.participants):
+            self.player.player_view.show_players(
+                self.tournament.tournament_model.participants
+            )
+
         players = [
             self.player.player_model.load_players_from_dict(player)
             for player in self.tournament.tournament_model.participants
@@ -154,3 +165,7 @@ class ReportController:
                 end_date=round.date_time_end,
                 matches=round.matches
             )
+
+    def refresh_tournaments(self):
+        self.tournament.tournament_model.all_tournaments.clear()
+        self.tournament.tournament_model.load_all_tournaments()

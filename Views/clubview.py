@@ -68,6 +68,11 @@ class ClubView:
         print(f"Le numéro d'identifiant national \"{national_chest_id}\" n'est pas correct.")
 
     @staticmethod
+    def show_error_empty_name():
+        print("Erreur: Le nom du club ne peut pas être vide.")
+
+
+    @staticmethod
     def show_no_club_matching(information: str):
         print(f"Aucun club ayant pour information \"{information}\" existe dans la base.")
 
@@ -103,3 +108,14 @@ class ClubView:
     @staticmethod
     def show_club_exist(national_chest_id):
         print(f"Création impossible: Un club ayant pour identifiant \"{national_chest_id}\" existe déjà dans la base de données.")
+
+    @staticmethod
+    def show_no_club_exist_with_name(club_name):
+        print(f"Aucun club ayant pour nom \"{club_name}\" existe dans la base de données.")
+
+
+    def get_club_player(self):
+        self.show_border()
+        return input(
+            "Quel est le numéro correspondant au club du joueur ? : "
+        )

@@ -31,25 +31,25 @@ class ClubController:
 
     def new_club(self):
         club_name, national_chest_id = self.club_view.get_club_informations()
-        result = self.check_national_chest_id(national_chest_id)
-        if result:
-            club_exist = self.check_club_exist(national_chest_id)
-            if not club_exist:
+        if not self._check_club_name(club_name):
+            return
+        if self.check_national_chest_id(national_chest_id):
+            if self.check_club_exist(national_chest_id):
+                self.club_view.show_club_exist(national_chest_id)
+            else:
                 self.club_model.create_club(club_name, national_chest_id)
                 self.club_view.show_created_club(club_name)
-                helpers.sleep_a_few_seconds()
-            else:
-                self.club_view.show_club_exist(national_chest_id)
-                helpers.sleep_a_few_seconds()
+
         else:
             self.club_view.show_error_national_chest_id(national_chest_id)
-            helpers.sleep_a_few_seconds()
+
+        helpers.sleep_a_few_seconds()
 
     def check_club_exist(self, national_chest_id):
-        for club in self.club_model.all_clubs:
-            if club.national_chest_id == national_chest_id:
-                return True
-        return False
+        return any(
+            club.national_chest_id == national_chest_id
+            for club in self.club_model.all_clubs
+        )
 
     @staticmethod
     def check_national_chest_id(national_chest_id):
@@ -67,10 +67,7 @@ class ClubController:
     def modify_club_name(self):
         club_search = self.club_view.get_club_to_modify()
         for club in self.club_model.all_clubs:
-            if club_search in club.name:
-                club_found = club
-                break
-            elif club_search in club.national_chest_id:
+            if club_search in club.name or club_search in club.national_chest_id:
                 club_found = club
                 break
             else:
@@ -83,13 +80,48 @@ class ClubController:
             )
             if confirm_choice != "O":
                 return
-            else:
-                club_found.name = self.club_view.get_new_club_name()
-                club_found.modify_club()
-                self.club_view.show_modified_club(club_found.name)
-                helpers.sleep_a_few_seconds()
-
+            
+            club_found.name = self.club_view.get_new_club_name()
+            club_found.modify_club()
+            self.club_view.show_modified_club(club_found.name)
         else:
             self.club_view.show_no_club_matching(club_search)
-            helpers.sleep_a_few_seconds()
 
+        helpers.sleep_a_few_seconds()
+
+    def select_club(self):
+        if not self.club_model.all_clubs:
+            self.club_view.show_empty_club_list()
+            helpers.sleep_a_few_seconds()
+            return False
+        
+        options_list = []
+        self.club_view.show_border()
+        for i, club in enumerate(self.club_model.all_clubs, start=1):
+            options_list.append(str(i))
+            self.club_view.show_club(
+                club_name=club.name, national_chest_id=club.national_chest_id,
+                current_club=i
+            )
+
+        user_choice = self.club_view.get_club_player()
+        if self._check_user_choice(user_choice, options_list):
+            return self.club_model.all_clubs[int(user_choice)-1].name
+        
+        return False
+
+    def _check_user_choice(self, user_choice, options_list):
+        if user_choice in options_list:
+            return True
+        
+        self.club_view.show_error_message_choice(user_choice)
+        helpers.sleep_a_few_seconds()
+        return False
+    
+    def _check_club_name(self, club_name):
+        if not club_name:
+            self.club_view.show_error_empty_name()
+            helpers.sleep_a_few_seconds()
+            return False
+        
+        return True

@@ -90,12 +90,13 @@ class PlayerModel:
         return cls(**player)
 
     @staticmethod
-    def create_player(first_name, last_name, birth_date, club_name):
+    def create_player(first_name, last_name, birth_date, club_name, participation=False):
         player = PlayerModel(
             first_name=first_name,
             last_name=last_name,
             birth_date=birth_date,
-            club_name=club_name
+            club_name=club_name,
+            participation=participation
         )
         player.save_player()
 
