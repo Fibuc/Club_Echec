@@ -42,8 +42,8 @@ class PlayerController:
         birth_date = self.player_view.get_new_player_birth_date()
         if not self._check_birth_date(birth_date):
             return
-        club_name = self.club.select_club()
-        if not club_name:
+        club = self.club.select_club(from_player_menu=True)
+        if not club:
             return
         participation = self.player_view.get_new_player_participation()
         participation = participation in ["o", "O"]
@@ -51,7 +51,7 @@ class PlayerController:
             first_name=first_name,
             last_name=last_name,
             birth_date=birth_date,
-            club_name=club_name,
+            club_name=club.name,
             participation=participation
         )
         self.player_view.show_new_player_created(player.full_name)
@@ -73,6 +73,9 @@ class PlayerController:
         self.player_view.show_title_players()
         self.player_view.show_players(matching_players, numbering=True)
         player_user_choice = self.player_view.get_index_player_to_modify()
+        if not player_user_choice:
+            return
+        
         index_player_to_modify = self.check_user_choice(
             player_user_choice,
             matching_players
@@ -111,11 +114,11 @@ class PlayerController:
                         player.modify_player(birth_date=new_value)
                         player.birth_date = new_value
                     case 3:
-                        club_name = self.club.select_club()
-                        if not club_name:
+                        club = self.club.select_club(from_player_menu=True)
+                        if not club:
                             return
-                        player.modify_player(club_name=club_name)
-                        player.club_name = club_name
+                        player.modify_player(club_name=club.name)
+                        player.club_name = club.name
 
                 self.player_view.show_valid_modifications()
                 helpers.sleep_a_few_seconds()

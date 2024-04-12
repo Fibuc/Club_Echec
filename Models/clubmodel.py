@@ -1,9 +1,10 @@
 from typing import ClassVar
 from tinydb import TinyDB, Query
 
+import config
 import menus
 
-CLUB_DB = TinyDB(menus.SAVING_PATH_CLUB, indent=4).table("Clubs")
+CLUB_DB = TinyDB(config.SAVING_PATH_CLUB, indent=4).table("Clubs")
 
 class ClubModel:
     """Classe Club"""

@@ -1,5 +1,6 @@
 from typing import Callable
 
+import config
 import helpers
 
 EDITABLE_INFORMATIONS_PLAYER = [
@@ -41,10 +42,13 @@ class PlayerView:
 
     def get_first_name(self):
         self._show_border()
-        return input("(Laisser vide pour afficher tous les joueurs)\nQuel est le prénom du joueur ? : ")
+        return input("(Laissez vide pour afficher tous les joueurs)\nQuel est le prénom du joueur ? : ")
 
     def get_index_player_to_modify(self):
-        return input("Quel est le numéro du joueur à modifier ? : ")
+        return input(
+            "(Laissez vide pour revenir au menu)\n"
+            "Quel est le numéro du joueur à modifier ? : "
+        )
 
     def get_information_to_modify(self):
         self._show_border()
@@ -142,13 +146,13 @@ class PlayerView:
     def _show_number_of_player_found(result_list: list):
         result_numer = len(result_list)
         plural_choice = (
-            f"{'s ont été trouvés.' if result_numer > 1 else " a été trouvé."}"
+            f"{'s ont été trouvés.' if result_numer > 1 else ' a été trouvé.'}"
         )
         print(f"Résultat: {result_numer} joueur{plural_choice} ")
 
     @staticmethod
     def _show_border():
-        print(helpers.BORDER)
+        print(config.BORDER)
 
     @staticmethod
     def show_error_empty_names():

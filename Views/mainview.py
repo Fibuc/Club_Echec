@@ -1,5 +1,6 @@
 from typing import Callable
 
+import config
 import helpers
 import menus
 
@@ -10,11 +11,11 @@ class MainView:
     def show_welcome_message():
         """Affiche le message de bienvenue."""
         welcome_message = menus.WELCOME_MESSAGE
-        border_menu_size = (helpers.BORDER_SIZE - len(welcome_message)) // 2
-        centered_menu = f"{border_menu_size * " "}{welcome_message}"
+        border_menu_size = (config.BORDER_SIZE - len(welcome_message)) // 2
+        centered_menu = f"{border_menu_size * ' '}{welcome_message}"
         message = (
-            f"{helpers.BACK_TO_LINE}"
-            f"{helpers.BORDER}{helpers.BACK_TO_LINE}"
+            f"{config.BACK_TO_LINE}"
+            f"{config.BORDER}{config.BACK_TO_LINE}"
             f"{centered_menu}"
         )
         print(message)

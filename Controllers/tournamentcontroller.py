@@ -9,6 +9,7 @@ from Views.tournamentview import TournamentView
 from Controllers.playercontroller import PlayerController
 
 # Imports des utilitaires.
+import config
 import helpers
 import menus
 
@@ -108,6 +109,9 @@ class TournamentController:
             return
         
         user_choice = self.player.player_view.get_index_player_to_modify()
+        if not user_choice:
+            return
+        
         index = self.player.check_user_choice(user_choice, players_found)
         if type(index) == int:
             player_to_modify = players_found[index]
@@ -150,8 +154,8 @@ class TournamentController:
             all_participants_dict = self.tournament_model.load_participants()
             for participant in all_participants_dict:
                 for player in self.tournament_model.participants:
-                    if player.full_name == f"{participant["first_name"]} {participant["last_name"]}":
-                        player.points = participant["points"]
+                    if player.full_name == f"{participant['first_name']} {participant['last_name']}":
+                        player.points = participant['points']
 
     def sync_round_with_tournament(self):
         """
@@ -215,7 +219,7 @@ class TournamentController:
 
     def _check_number_participants(self):
         number_of_participants = len(self.tournament_model.participants)
-        if number_of_participants < helpers.MINIMUM_PLAYER_FOR_TOURNAMENT:
+        if number_of_participants < config.MINIMUM_PLAYER_FOR_TOURNAMENT:
             self.tournament_view.show_not_enough_participants(
                 number_of_participants
             )

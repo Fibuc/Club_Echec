@@ -1,5 +1,6 @@
 from typing import Callable
 
+import config
 import helpers
 
 class TournamentView:
@@ -22,8 +23,10 @@ class TournamentView:
         Returns:
             list: Retourne la liste des options.
         """
-        decoration = helpers.decorative_menu_element(function=menu_function)
-        full_menu = decoration(menu_name, options_menu, participants)
+        decoration = helpers.decorative_menu_element(
+            function=menu_function, description=participants
+            )
+        full_menu = decoration(menu_name, options_menu)
         print(full_menu)
         return options_menu
 
@@ -68,16 +71,16 @@ class TournamentView:
     @staticmethod
     def show_number_of_tournaments_found(number_of_tournament: int):
         plural_choice = (
-            f"{'s trouvés.' if number_of_tournament > 1 else " trouvé."}"
+            f"{'s trouvés.' if number_of_tournament > 1 else ' trouvé.'}"
         )
         print(f"Résultat: {number_of_tournament} tournoi{plural_choice} ")
 
     @staticmethod
     def _show_border():
-        print(helpers.BORDER)
+        print(config.BORDER)
 
     def show_winner(self, winner_name, winner_points):
-        print(helpers.SPACE)
+        print(config.SPACE)
         self._show_border()
         print(f"Fin du tournoi - Vainqueur: {winner_name} avec {winner_points} points")
         self._show_border()
@@ -120,6 +123,6 @@ class TournamentView:
     @staticmethod
     def show_not_enough_participants(number_of_participants):
         print(
-            f"Erreur: Il faut minimum {helpers.MINIMUM_PLAYER_FOR_TOURNAMENT} "
+            f"Erreur: Il faut minimum {config.MINIMUM_PLAYER_FOR_TOURNAMENT} "
             f"participants pour lancer un tournoi. Actuellement "
             f"{number_of_participants} participants.")

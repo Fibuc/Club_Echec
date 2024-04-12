@@ -4,6 +4,7 @@ from Models.roundmodel import RoundModel
 from Views.roundview import RoundView
 from Controllers.matchcontroller import MatchController
 
+import config
 import helpers
 
 class RoundController:
@@ -32,7 +33,7 @@ class RoundController:
         else:
             self.resume_round(all_matches_played)
 
-        while self.current_round <= helpers.DEFAULT_NUMBER_ROUNDS:
+        while self.current_round <= config.DEFAULT_NUMBER_ROUNDS:
             option = self.option_choice(round_start)
             self.round_view.show_menu(
                 helpers.create_menu,

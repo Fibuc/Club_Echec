@@ -1,12 +1,3 @@
-from pathlib import Path
-
-
-
-DIR_PATH = Path.cwd()
-DATA_DIR = DIR_PATH / "data"
-TOURNAMENT_DIR = DATA_DIR / "tournament"
-SAVING_PATH_CLUB = DATA_DIR / "clubs.json"
-SAVING_PATH_PLAYERS = DATA_DIR / "players.json"
 
 WELCOME_MESSAGE = "BIENVENUE DANS L'APPLICATION DE TOURNOIS"
 
@@ -23,6 +14,8 @@ MAIN_MENU = {
         "Quitter l'application"
     ]
 }
+
+MAIN_MENU_NAME = MAIN_MENU[next(iter(MAIN_MENU))]
 
 TOURNAMENT_MENU = {
     NAME_MENU : "CREATION TOURNOIS",
@@ -72,5 +65,3 @@ TOURNAMENT_REPORT_MENU = {
         "Afficher la liste des tours",
     ]
 }
-
-MAIN_MENU_NAME = MAIN_MENU[next(iter(MAIN_MENU))]

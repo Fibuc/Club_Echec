@@ -1,5 +1,6 @@
 from typing import Callable
 
+import config
 import helpers
 
 class ReportView:
@@ -38,7 +39,7 @@ class ReportView:
 
     @staticmethod
     def get_tournament_to_show():
-         print(helpers.BORDER)
+         print(config.BORDER)
          print("(Laisser vide pour annuler)")
          return input("Quel est le tournois que vous voulez afficher ? : ")
     
@@ -54,10 +55,11 @@ class ReportView:
 
     @staticmethod
     def menu_tournament_report(
-        menu_function: Callable, menu_name: str, options_menu: list, dates
+        menu_function: Callable, menu_name: str, options_menu: list,
+        tournament_informations: list
     ):
-        decoration = helpers.decorative_menu_element(function=menu_function)
-        full_menu = decoration(menu_name, options_menu, dates)
+        decoration = helpers.decorative_menu_element(function=menu_function, description=tournament_informations)
+        full_menu = decoration(menu_name, options_menu)
         print(full_menu)
         return options_menu
          

@@ -3,10 +3,11 @@ from tinydb import TinyDB
 from typing import ClassVar
 
 
+import config
 import helpers
 import menus 
 
-TOURNAMENT_DIR = menus.TOURNAMENT_DIR
+TOURNAMENT_DIR = config.TOURNAMENT_DIR
 
 class TournamentModel:
     """Classe Tournois"""

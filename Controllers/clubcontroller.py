@@ -15,7 +15,7 @@ class ClubController:
             self.club_view.show_menu(
                 helpers.create_menu,
                 self.club_model.menu_name,
-                self.club_model.menu_options,
+                self.club_model.menu_options
             )
             user_choice = self.club_view.get_menu_user_choice()
             match user_choice:
@@ -65,35 +65,20 @@ class ClubController:
         return True
 
     def modify_club_name(self):
-        club_search = self.club_view.get_club_to_modify()
-        for club in self.club_model.all_clubs:
-            if club_search in club.name or club_search in club.national_chest_id:
-                club_found = club
-                break
-            else:
-                club_found = None
-
-        if club_found:
-            confirm_choice = self.club_view.get_confirm_choice(
-                club_found.name,
-                club_found.national_chest_id
-            )
-            if confirm_choice != "O":
-                return
-            
-            club_found.name = self.club_view.get_new_club_name()
-            club_found.modify_club()
-            self.club_view.show_modified_club(club_found.name)
-        else:
-            self.club_view.show_no_club_matching(club_search)
+        club = self.select_club()
+        if not club:
+            return
+        club.name = self.club_view.get_new_club_name()
+        club.modify_club()
+        self.club_view.show_modified_club(club.name)
 
         helpers.sleep_a_few_seconds()
 
-    def select_club(self):
+    def select_club(self, from_player_menu: bool=False) -> ClubModel | None:
         if not self.club_model.all_clubs:
             self.club_view.show_empty_club_list()
             helpers.sleep_a_few_seconds()
-            return False
+            return
         
         options_list = []
         self.club_view.show_border()
@@ -103,12 +88,16 @@ class ClubController:
                 club_name=club.name, national_chest_id=club.national_chest_id,
                 current_club=i
             )
-
-        user_choice = self.club_view.get_club_player()
+        if from_player_menu:
+            user_choice = self.club_view.get_club_player()
+        else:
+            user_choice = self.club_view.get_club_to_modify()
+        if not user_choice:
+            return
         if self._check_user_choice(user_choice, options_list):
-            return self.club_model.all_clubs[int(user_choice)-1].name
+            return self.club_model.all_clubs[int(user_choice)-1]
         
-        return False
+        return
 
     def _check_user_choice(self, user_choice, options_list):
         if user_choice in options_list:

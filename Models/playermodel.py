@@ -1,10 +1,12 @@
 from typing import ClassVar
 from tinydb import TinyDB, Query
 
+import config
 import menus
-from helpers import DEFAULT_NUMBER_OF_POINT
+from config import DEFAULT_NUMBER_OF_POINT
 
-PLAYER_DB = TinyDB(menus.SAVING_PATH_PLAYERS, indent=4).table("Players")
+
+PLAYER_DB = TinyDB(config.SAVING_PATH_PLAYERS, indent=4).table("Players")
 
 class PlayerModel:
     """Classe joueur"""

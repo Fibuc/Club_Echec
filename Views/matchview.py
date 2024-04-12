@@ -1,11 +1,11 @@
-import helpers
+import config
 
 class MatchView:
 
     def get_result_of_match(self, player_1, player_2):
-        print(f"{helpers.SPACE}Dans le match qui a opposé, le vainqueur est :"
-              f"\n{helpers.BORDER}\n1 - {player_1}"
-              f"\n2 - {player_2}\n3 - Match nul\n{helpers.BORDER}"
+        print(f"{config.SPACE}Dans le match qui a opposé, le vainqueur est :"
+              f"\n{config.BORDER}\n1 - {player_1}"
+              f"\n2 - {player_2}\n3 - Match nul\n{config.BORDER}"
         )
         return input("Quel est votre choix ? (1/3) : ")
 

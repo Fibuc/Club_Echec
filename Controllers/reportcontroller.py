@@ -28,7 +28,7 @@ class ReportController:
         while launch:
             self.report_view.show_menu(
                 helpers.create_menu, self.report_model.menu_name,
-                self.report_model.menu_options,
+                self.report_model.menu_options
             )
             user_choice = self.report_view.get_menu_user_choice()
             match user_choice:

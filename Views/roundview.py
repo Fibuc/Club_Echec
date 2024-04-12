@@ -24,8 +24,11 @@ class RoundView:
         Returns:
             list: Retourne la liste des options.
         """
-        decoration = helpers.decorative_menu_element(function=menu_function)
-        full_menu = decoration(menu_name, options_menu, current_round, can_undo)
+        decoration = helpers.decorative_menu_element(
+             function=menu_function,
+            description=current_round
+        )
+        full_menu = decoration(menu_name, options_menu, can_undo)
         print(full_menu)
         return options_menu
 

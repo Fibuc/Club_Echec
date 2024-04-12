@@ -1,5 +1,6 @@
 from typing import Callable
 
+import config
 import helpers
 
 class ClubView:
@@ -46,11 +47,11 @@ class ClubView:
 
     @staticmethod
     def show_border():
-        print(helpers.BORDER)
+        print(config.BORDER)
 
     @staticmethod
     def back_to_line():
-        print(helpers.BACK_TO_LINE)
+        print(config.BACK_TO_LINE)
 
     def get_club_informations(self):
         self.show_border()
@@ -88,11 +89,6 @@ class ClubView:
     def show_empty_club_list():
         print("La liste des clubs est vide.")
 
-
-    def get_club_to_modify(self):
-        self.show_border()
-        return input("Quel est le nom ou l'ID du club à modifier ? : ")
-
     def get_new_club_name(self):
         self.show_border()
         return input("Quel est son nouveau nom ? : ")
@@ -115,7 +111,20 @@ class ClubView:
 
 
     def get_club_player(self):
-        self.show_border()
-        return input(
+        return self._get_user_input(
             "Quel est le numéro correspondant au club du joueur ? : "
         )
+    
+    def get_club_to_modify(self):
+        return self._get_user_input(
+            "Quel est le numéro du club à modifier ? : "
+        )
+    
+    def _get_user_input(self, message):
+        self.show_border()
+        self._show_empty_to_back()
+        return input(message)
+    
+    @staticmethod
+    def _show_empty_to_back():
+        print("(Laissez vide pour revenir au menu)")

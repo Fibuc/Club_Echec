@@ -1,3 +1,12 @@
+from pathlib import Path
+
+# Import des utilitaires.
+import helpers
+import config
+
+# Création du dossier data si n'existe pas
+Path(config.DATA_DIR).mkdir(exist_ok=True, parents=True)
+
 # Imports modèle et vue du main.
 from Views.mainview import MainView
 from Models.mainmodel import MainModel
@@ -7,10 +16,6 @@ from Controllers.tournamentcontroller import TournamentController
 from Controllers.playercontroller import PlayerController
 from Controllers.clubcontroller import ClubController
 from Controllers.reportcontroller import ReportController
-
-# Import des utilitaires.
-import helpers
-
 
 class MainController:
     """Classe contrôleur principal"""
