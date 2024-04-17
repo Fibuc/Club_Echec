@@ -4,9 +4,6 @@ from pathlib import Path
 import helpers
 import config
 
-# Création du dossier data si n'existe pas
-Path(config.DATA_DIR).mkdir(exist_ok=True, parents=True)
-
 # Imports modèle et vue du main.
 from Views.mainview import MainView
 from Models.mainmodel import MainModel
@@ -17,15 +14,39 @@ from Controllers.playercontroller import PlayerController
 from Controllers.clubcontroller import ClubController
 from Controllers.reportcontroller import ReportController
 
+# Création du dossier data si n'existe pas
+Path(config.DATA_DIR).mkdir(exist_ok=True, parents=True)
+
+
 class MainController:
     """Classe contrôleur principal"""
-    def __init__(self):
-        self.main_view = MainView()
-        self.main_model = MainModel()
-        self.tournament = TournamentController()
-        self.player = PlayerController()
-        self.club = ClubController()
-        self.report = ReportController()
+    def __init__(
+        self, main_view=MainView(), main_model=MainModel(),
+        tournament=TournamentController(), player=PlayerController(),
+        club=ClubController(), report=ReportController()
+    ):
+        """Initialise le contrôleur avec le modèle et la vue ainsi que les
+        autres contrôleurs nécessaires.
+
+        Args:
+            main_view (MainView, optional): Vue principale. Défaut MainView().
+            main_model (MainModel, optional): Modèle principal.
+            Défaut MainModel().
+            tournament (TournamentController, optional): Contrôleur des
+            tournois. Défaut TournamentController().
+            player (PlayerController, optional): Contrôleur des joueurs.
+            Défaut PlayerController().
+            club (ClubController, optional): Contrôleur des clubs.
+            Défaut ClubController().
+            report (ReportController, optional): Contrôleur des rapports.
+            Défaut ReportController().
+        """
+        self.main_view = main_view
+        self.main_model = main_model
+        self.tournament = tournament
+        self.player = player
+        self.club = club
+        self.report = report
 
     def run(self):
         """Lance l'éxecution de l'application"""
@@ -35,6 +56,10 @@ class MainController:
         self.main_view.say_goodbye()
 
     def main_menu(self):
+        """
+        Contrôle la fonctionnalité du menu principal, permettant aux
+        utilisateurs de naviguer à travers les différentes options du menu.
+        """
         launch = True
         first_display = True
         while launch:
@@ -47,7 +72,7 @@ class MainController:
             user_choice = self.main_view.get_menu_user_choice()
             match user_choice:
                 case "1":
-                    self.tournament.start()
+                    self.tournament.check_unfinished_tournaments()
                 case "2":
                     self.player.player_menu()
                 case "3":
@@ -62,6 +87,9 @@ class MainController:
             first_display = False
 
     def load_datas(self):
+        """
+        Charges toutes les données des joueurs, des tournois et des clubs.
+        """
         self.player.charge_all_players()
         self.tournament.tournament_model.load_all_tournaments()
         self.club.club_model.load_clubs()

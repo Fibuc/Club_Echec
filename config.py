@@ -3,9 +3,8 @@ from pathlib import Path
 # Configurations des menus.
 BORDER_SIZE = 125
 BORDER = "=" * BORDER_SIZE
-BACK_TO_LINE = "\n"
 SPACING_SIZE = 10
-SPACE = BACK_TO_LINE * SPACING_SIZE
+SPACE = "\n" * SPACING_SIZE
 
 # Configuration d'affichage des messages.
 SECOND_TO_WAIT = 3
@@ -18,7 +17,7 @@ MINIMUM_PLAYER_FOR_TOURNAMENT = 8
 DEFAULT_NUMBER_OF_POINT = 0
 
 # Configurations des répertoires.
-DIR_PATH = Path.cwd()
+DIR_PATH = Path(__file__).resolve().parent
 DATA_DIR = DIR_PATH / "data"
 TOURNAMENT_DIR = DATA_DIR / "tournament"
 SAVING_PATH_CLUB = DATA_DIR / "clubs.json"
