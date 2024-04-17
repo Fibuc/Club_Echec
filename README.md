@@ -1,19 +1,19 @@
 # Club d'échecs
 
-Cette application est un gestionnaire de tournois d'échecs. Celui-ci permet de réaliser des tournois ayant des rondes de matchs basées sur la méthode de tournois suisse.
+Cette application est un gestionnaire de tournois d'échecs. Celle-ci permet de réaliser des tournois ayant des rondes de matchs basées sur la méthode de tournois suisse.
 
 ## Installation
 
-**IMPORTANT :** L'application utilise les matchs cases et les opérateurs OU logique et ET logique. Pour cela, vous aurez donc besoin d'une version minimum de python 3.10 pour pouvoir le lancer.
+**IMPORTANT :** L'application utilise les matchs cases et les opérateurs "&" et "|". Par cela, vous aurez donc besoin d'une version minimum de python 3.10 pour pouvoir la lancer.
 
-### Cloner le dépôt
+### Clonez le dépôt
 
 Pour cloner le dépôt, vous devrez ouvrir le terminal et effectuer la commande suivante dans le dossier de votre choix :
 ```bash
     git clone https://github.com/Fibuc/Club_Echec.git
 ```
 
-### Créer un environnement virtuel
+### Créez un environnement virtuel
 
 Ensuite, vous aurez besoin de créer un environnement virtuel que vous devrez nommer "env" afin d'éviter son push dans le repository. Si toutefois, vous désirez utiliser un autre nom d'environnement, merci de bien vouloir l'ajouter au ".gitignore".
 
@@ -23,7 +23,7 @@ Ouvrez le terminal et rendez-vous dans le dossier du dépôt local "Club_Echec" 
     python -m venv env
 ```
 
-### Activer votre environnement virtuel
+### Activez votre environnement virtuel
 
 Pour activer votre environnement virtuel la méthode est différente selon votre système d'exploitation.
 
@@ -36,7 +36,7 @@ Pour activer votre environnement virtuel la méthode est différente selon votre
     chemin_de_votre_env\Scripts\activate.bat
 ```
 
-### Installer les packages
+### Installez les packages
 
 Enfin, lorsque vous aurez activé votre environnement virtuel, vous aurez également besoin d'installer les packages essentiels pour le lancement disponibles dans le requirements.txt
 
@@ -44,13 +44,13 @@ Enfin, lorsque vous aurez activé votre environnement virtuel, vous aurez égale
     pip install -r requirements.txt
 ```
     
-Veillez également à bien vous situer sur la branche "main" lors de l'exécution de script.py.
+Veillez également à bien vous situer sur la branche "main" lors de l'exécution de **main.py**.
 
 ## Utilisation
 
 En lançant l'application, vous vous retrouverez sur le menu principal avec différentes options disponibles.
 
-- Créer/Reprendre un tournoi
+- Créer/reprendre un tournoi
 - Ajouter/modifier un joueur
 - Ajouter/modifier un club
 - Afficher des rapports
@@ -94,7 +94,7 @@ Dans cette option "Afficher des rapports", vous aurez la possibilité d'afficher
 - Afficher la liste de tous les clubs
 - Afficher la liste de tous les tournois terminés.
 
-Si vous demandez à afficher les tournois, ceux-ci afficheront les informations limitées. Si vous voulez afficher toutes les informations comme la liste des participants, la liste de chaque tour ou bien le classement final, vous serez invité à en sélectionner un.
+Si vous demandez à afficher les tournois, ceux-ci afficheront les informations limitées. Si vous voulez afficher toutes les informations comme la liste des participants, la liste de chaque tour ou bien le classement final, vous serez invité à choisir le tournoi désiré.
 
 ## Configurations
 
@@ -107,7 +107,7 @@ Dans ce module, vous pourrez modifier les paramètres suivants :
 - Le temps d'affichage des messages
 - Le nombre de rounds d'un tournoi
 - Le nombre minimum de joueurs nécessaire pour un tournoi
-- Le nombre par défaut de points des joueurs
+- Le nombre de points des joueurs par défaut
 - Les répertoires d'enregistrement
 
 A modifier selon votre désir !
@@ -116,7 +116,7 @@ A modifier selon votre désir !
 
 L'application a été contrôlée par flake8.
 
-Pour générer un rapport flake8 de l'application en format HTML, vous devrez vous rendre dans votre terminal à la racine du répertoire de l'application puis utiliser la fonction suivante :
+Pour générer un rapport flake8 de l'application en format HTML, vous devrez ouvrir votre terminal et vous rendre à la racine de l'application puis utiliser la fonction suivante :
 
 ```bash
     flake8 --format=html --htmldir=flake-report
