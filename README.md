@@ -114,15 +114,15 @@ A modifier selon votre désir !
 
 ## Générez un rapport flake8
 
-L'application a été contrôlée par flake8.
+L'application a été contrôlée par flake8. Vous trouverez le rapport en ouvrant le fichier "index.html" se trouvant dans le dossier "flake8_rapport"
 
-Pour générer un rapport flake8 de l'application en format HTML, vous devrez ouvrir votre terminal et vous rendre à la racine de l'application puis utiliser la fonction suivante :
+Pour générer un nouveau rapport flake8 de l'application en format HTML, vous devrez ouvrir votre terminal et vous rendre à la racine de l'application puis utiliser la fonction suivante :
 
 ```bash
-    flake8 --format=html --htmldir=flake-report
+    flake8 --format=html --htmldir=flake8_rapport
 ```
 
-Ce rapport sera généré dans le dossier "flake-report".
+Ce nouveau rapport sera généré dans le dossier "flake8_rapport".
  
 
 
